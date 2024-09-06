@@ -19,21 +19,34 @@
   <meta name="author" content="gagaduck">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="分类">
-<meta property="og:url" content="https://gagaducko.github.io/categories/index.html">
+    <meta name="description" content="学习笔记——通过nginx对UDP做负载均衡">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记—通过nginx对UDP做负载均衡">
+<meta property="og:url" content="https://gagaducko.github.io/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E9%80%9A%E8%BF%87nginx%E5%AF%B9UDP%E5%81%9A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/index.html">
 <meta property="og:site_name" content="gagaduck">
+<meta property="og:description" content="学习笔记——通过nginx对UDP做负载均衡">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-09-06T09:22:32.000Z">
+<meta property="article:modified_time" content="2024-09-06T10:19:08.214Z">
 <meta property="article:author" content="gagaduck">
+<meta property="article:tag" content="UDP">
+<meta property="article:tag" content="Nginx">
+<meta property="article:tag" content="负载均衡">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>分类 - gagaduck</title>
+  <title>学习笔记—通过nginx对UDP做负载均衡 - gagaduck</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 
 
@@ -83,7 +96,7 @@
   <header>
     
 
-<div class="header-inner" style="height: 60vh;">
+<div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -189,9 +202,49 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="分类"></span>
+            <span id="subtitle" data-typed-text="学习笔记—通过nginx对UDP做负载均衡"></span>
           
         </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-09-06 17:22" pubdate>
+          2024年9月6日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          70 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          1 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
 
         
       </div>
@@ -207,252 +260,201 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">学习笔记—通过nginx对UDP做负载均衡</h1>
+            
+            
+              <div class="markdown-body">
                 
+                <p>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br></p>
 
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
 
-
-
-
-<div class="category-list">
+<span class="category-chains">
   
   
     
-    
-    
-    <div class="category row nomargin-x">
-      <a class="category-item collapsed
-          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="学习笔记"
-        id="heading-078425eaf316a180b0989442e53f920b" role="tab" data-toggle="collapse" href="#collapse-078425eaf316a180b0989442e53f920b"
-        aria-expanded="false"
-      >
-        学习笔记
-        <span class="list-group-count"></span>
-        <i class="iconfont icon-arrowright"></i>
-      </a>
-      
-        <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-count col-2 col-md-1 col-xm-1">
-          <i class="iconfont icon-articles"></i>
-          <span>4</span>
-        </a>
-      
-      <div class="category-collapse collapse " id="collapse-078425eaf316a180b0989442e53f920b"
-           role="tabpanel" aria-labelledby="heading-078425eaf316a180b0989442e53f920b">
+      <span class="category-chain">
         
-        
-          
-          
-  <div class="category-post-list">
-    
-    
-  </div>
-
-          
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
   
+  
+    <span>></span>
     
-    
-    
-    <div class="category-sub row nomargin-x">
-      <a class="category-subitem collapsed
-          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="微服务学习笔记"
-        id="heading-d960333602de656ca245e609ee8f156e" role="tab" data-toggle="collapse" href="#collapse-d960333602de656ca245e609ee8f156e"
-        aria-expanded="false"
-      >
-        微服务学习笔记
-        <span class="list-group-count"></span>
-        <i class="iconfont icon-arrowright"></i>
-      </a>
-      
-        <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-count col-2 col-md-1 col-xm-1">
-          <i class="iconfont icon-articles"></i>
-          <span>3</span>
-        </a>
-      
-      <div class="category-collapse collapse " id="collapse-d960333602de656ca245e609ee8f156e"
-           role="tabpanel" aria-labelledby="heading-d960333602de656ca245e609ee8f156e">
-        
-        
-          
-  <div class="category-post-list">
-    
-    
-      
-      
-        <a href="/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-2-%E2%80%94%E7%BD%91%E5%85%B3/" title="学习笔记—微服务—技术栈实践(2)—网关"
-           class="list-group-item list-group-item-action
-           ">
-          <span class="category-post">学习笔记—微服务—技术栈实践(2)—网关</span>
-        </a>
-      
-    
-      
-      
-        <a href="/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-1-%E2%80%94%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E4%B8%8E%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/" title="学习笔记—微服务—技术栈实践(1)—注册中心与配置中心"
-           class="list-group-item list-group-item-action
-           ">
-          <span class="category-post">学习笔记—微服务—技术栈实践(1)—注册中心与配置中心</span>
-        </a>
-      
-    
-      
-      
-        <a href="/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="学习笔记—微服务—基础知识"
-           class="list-group-item list-group-item-action
-           ">
-          <span class="category-post">学习笔记—微服务—基础知识</span>
-        </a>
-      
-    
-  </div>
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
 
-        
-      </div>
+  
+
+      </span>
+    
+  
+</span>
+
     </div>
   
-    
-    
-    
-    <div class="category-sub row nomargin-x">
-      <a class="category-subitem collapsed
-          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="杂项"
-        id="heading-28726c40cc9246c7db10dfc4ca4f32be" role="tab" data-toggle="collapse" href="#collapse-28726c40cc9246c7db10dfc4ca4f32be"
-        aria-expanded="false"
-      >
-        杂项
-        <span class="list-group-count"></span>
-        <i class="iconfont icon-arrowright"></i>
-      </a>
-      
-        <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%9D%82%E9%A1%B9/" class="category-count col-2 col-md-1 col-xm-1">
-          <i class="iconfont icon-articles"></i>
-          <span>1</span>
-        </a>
-      
-      <div class="category-collapse collapse " id="collapse-28726c40cc9246c7db10dfc4ca4f32be"
-           role="tabpanel" aria-labelledby="heading-28726c40cc9246c7db10dfc4ca4f32be">
-        
-        
-          
-  <div class="category-post-list">
-    
-    
-      
-      
-        <a href="/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E9%80%9A%E8%BF%87nginx%E5%AF%B9UDP%E5%81%9A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="学习笔记—通过nginx对UDP做负载均衡"
-           class="list-group-item list-group-item-action
-           ">
-          <span class="category-post">学习笔记—通过nginx对UDP做负载均衡</span>
-        </a>
-      
-    
-  </div>
-
-        
-      </div>
-    </div>
   
-        
-      </div>
-    </div>
-  
-    
-    
-    
-    <div class="category row nomargin-x">
-      <a class="category-item collapsed
-          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="每月总结"
-        id="heading-c6477a024d1f51b720806b7277783c0b" role="tab" data-toggle="collapse" href="#collapse-c6477a024d1f51b720806b7277783c0b"
-        aria-expanded="false"
-      >
-        每月总结
-        <span class="list-group-count"></span>
-        <i class="iconfont icon-arrowright"></i>
-      </a>
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
       
-        <a href="/categories/%E6%AF%8F%E6%9C%88%E6%80%BB%E7%BB%93/" class="category-count col-2 col-md-1 col-xm-1">
-          <i class="iconfont icon-articles"></i>
-          <span>1</span>
-        </a>
+        <a href="/tags/UDP/" class="print-no-link">#UDP</a>
       
-      <div class="category-collapse collapse " id="collapse-c6477a024d1f51b720806b7277783c0b"
-           role="tabpanel" aria-labelledby="heading-c6477a024d1f51b720806b7277783c0b">
-        
-        
-          
-  <div class="category-post-list">
-    
-    
+        <a href="/tags/Nginx/" class="print-no-link">#Nginx</a>
       
+        <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="print-no-link">#负载均衡</a>
       
-        <a href="/2024/09/02/2024%E5%B9%B48%E6%9C%88%E6%80%BB%E7%BB%93/" title="2024年8月总结"
-           class="list-group-item list-group-item-action
-           ">
-          <span class="category-post">2024年8月总结</span>
-        </a>
-      
-    
-  </div>
-
-        
-      </div>
-    </div>
-  
-    
-    
-    
-    <div class="category row nomargin-x">
-      <a class="category-item collapsed
-          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="年度总结"
-        id="heading-56ab3fcb68d71a14fd96cf32631e8c5b" role="tab" data-toggle="collapse" href="#collapse-56ab3fcb68d71a14fd96cf32631e8c5b"
-        aria-expanded="false"
-      >
-        年度总结
-        <span class="list-group-count"></span>
-        <i class="iconfont icon-arrowright"></i>
-      </a>
-      
-        <a href="/categories/%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/" class="category-count col-2 col-md-1 col-xm-1">
-          <i class="iconfont icon-articles"></i>
-          <span>1</span>
-        </a>
-      
-      <div class="category-collapse collapse " id="collapse-56ab3fcb68d71a14fd96cf32631e8c5b"
-           role="tabpanel" aria-labelledby="heading-56ab3fcb68d71a14fd96cf32631e8c5b">
-        
-        
-          
-  <div class="category-post-list">
-    
-    
-      
-      
-        <a href="/2024/07/31/2024%E5%B9%B4%E5%B9%B4%E4%B8%AD%E6%80%BB%E7%BB%93/" title="2024年年中总结"
-           class="list-group-item list-group-item-action
-           ">
-          <span class="category-post">2024年年中总结</span>
-        </a>
-      
-    
-  </div>
-
-        
-      </div>
     </div>
   
 </div>
 
 
-              </div>
-            </div>
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>学习笔记—通过nginx对UDP做负载均衡</div>
+      <div>https://gagaducko.github.io/2024/09/06/学习笔记—通过nginx对UDP做负载均衡/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>gagaduck</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年9月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
           </div>
         </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="学习笔记—微服务—基础知识">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">学习笔记—微服务—基础知识</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/09/02/2024%E5%B9%B48%E6%9C%88%E6%80%BB%E7%BB%93/" title="2024年8月总结">
+                        <span class="hidden-mobile">2024年8月总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
       </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
     
 
     
@@ -545,6 +547,99 @@
 
 
 
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
 

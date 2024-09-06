@@ -4,6 +4,124 @@
   
     
     <entry>
+      <title>学习笔记—微服务—技术栈实践(2)—网关</title>
+      <link href="/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-2-%E2%80%94%E7%BD%91%E5%85%B3/"/>
+      <url>/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-2-%E2%80%94%E7%BD%91%E5%85%B3/</url>
+      
+        <content type="html"><![CDATA[<p>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习笔记 </category>
+          
+          <category> 微服务学习笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 微服务，网关 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>学习笔记—微服务—技术栈实践(1)—注册中心与配置中心</title>
+      <link href="/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-1-%E2%80%94%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E4%B8%8E%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/"/>
+      <url>/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-1-%E2%80%94%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E4%B8%8E%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/</url>
+      
+        <content type="html"><![CDATA[<p>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习笔记 </category>
+          
+          <category> 微服务学习笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 微服务 </tag>
+            
+            <tag> 注册中心 </tag>
+            
+            <tag> 配置中心 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>学习笔记—微服务—基础知识</title>
+      <link href="/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
+      <url>/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</url>
+      
+        <content type="html"><![CDATA[<h2 id="什么是微服务"><a href="#什么是微服务" class="headerlink" title="什么是微服务"></a>什么是微服务</h2><p>&emsp;&emsp;首先，要知道什么是微服务，得理解软件架构的演变。<br></p><h2 id="早期单体架构"><a href="#早期单体架构" class="headerlink" title="早期单体架构"></a>早期单体架构</h2><p>&emsp;&emsp;早期的软件，所有的功能都写在一起，整个软件是一个单一的整体，这就是单体架构。<br><br>&emsp;&emsp;单体架构随着软件功能的增加，不可避免的就会就会越来越复杂，存在着许多的缺点<br></p><ul><li>所有功能耦合在一起，互相影响，最终难以管理。</li><li>哪怕只修改一行代码，整个软件就要重新构建和部署，成本非常高。</li><li>因为软件做成了一个整体，不可能每个功能单独开发和测试，只能整体开发和测试，导致必须采用瀑布式的开发模型。<br><br>&emsp;&emsp;简而言之，单体架构的大型软件，不仅开发速度慢，而且会形成难以维护和升级的复杂代码，成为程序员的沉重负担。<br></li></ul><h2 id="面向服务架构（SOA）"><a href="#面向服务架构（SOA）" class="headerlink" title="面向服务架构（SOA）"></a>面向服务架构（SOA）</h2><p>&emsp;&emsp;随之而来的，就是为了解决这些问题，人们提出来，要打破软件代码的耦合，将单体架构的软件拆分成一个个独立的功能单元。<br><br>&emsp;&emsp;大概在二十多年前，随着互联网的出现，功能单元，可以通过远程“服务”的方式来提供，以此诞生出了面向服务架构（service-oriented architecture，简称 SOA）。<br><br>&emsp;&emsp;什么是服务（service）呢？service 就是后台不间断运行、提供某种功能的一个程序。最常见的服务就是 Web 服务，通过80端口向外界提供网页访问。<br><br>&emsp;&emsp;而SOA就是把一个大型的单体程序，拆分成一个个独立服务，也就是说较小的程序，每个程序都是一个独立的功能单元，承担着不同的功能，服务之间通过通信协议连在一起。<br><br>&emsp;&emsp;于此，这种SOA的优点就展现出来了：<br></p><ul><li>每种服务功能单一，相当于一个小型软件，便于开发和测试。</li><li>各个服务独立运行，简化了架构，提高了可靠性。</li><li>鼓励和支持代码重用，同一个服务可以用于多种目的。</li><li>不同服务可以单独开发和部署，便于升级。</li><li>扩展性好，可以容易地加机器、加功能，承受高负载。</li><li>不容易出现单点故障。即使一个服务失败了，不会影响到其他服务。<br><br>&emsp;&emsp;跟单体架构不一样，面向服务架构是语言不敏感的，不同服务可以使用不同的语言和工具开发，可能需要部署在不同的系统和环境。<br><br>&emsp;&emsp;当然这意味着，面向服务架构默认运行在不同服务器上，每台服务器提供一种服务，多台服务器共同组成一个完整的网络应用。<br></li></ul><h2 id="微服务时代"><a href="#微服务时代" class="headerlink" title="微服务时代"></a>微服务时代</h2><p>&emsp;&emsp;在有了SOA之后，随着时代的发展，还需要了解这个部署方式的变化。<br><br>&emsp;&emsp;也就是虚拟化技术的发展。虚拟化技术至今已经走过了三个时代，没有容器化技术的演进就没有docker技术的诞生。<br><br>&emsp;&emsp;首先，是物理机时代，一个物理机，一个os，上面可能会跑很多个程序<br><br>&emsp;&emsp;进一步的，是虚拟机时代，一台物理机器安装多个虚拟机，一个虚拟机跑多个程序。<br><br>&emsp;&emsp;再进一步的，就是容器化的时代，一台物理机安装多个容器实例，一个容器跑多个程序。<br><br>&emsp;&emsp;容器化技术的一大优点就是：开发人员编写代码，本地环境是好的，但是部署到测试环境中，坏了，全是bug，环境不同。容器化技术，就是解决了该问题，将软件程序和运行的基础环境分开，开发人员编码完成后，将程序打包到一个容器镜像中去，镜像中详列出所依赖的环境，不同的容器中运行标准化的镜像，从而从根本上解决了环境不一致的问题。可移植性好，占地小，共享bin和lib<br><br>&emsp;&emsp;2014年，docker的出现，改变了软件开发的面貌，它让程序运行在容器中，每个容器可以分别设定运行环境，只需要占用很少的系统资源就可以使用。<br><br>&emsp;&emsp;显而易见，可以用容器来实现”面向服务架构”，每个服务不再占用一台服务器，而是占用一个容器。<br><br>&emsp;&emsp;这样就不需要多台服务器了，最简单的情况下，本机运行多个容器，只用一台服务器就实现了面向服务架构，这在以前是做不到的。这种实现方式就叫做微服务。<br><br>&emsp;&emsp;所以，微服务到底是什么呢？<br><br>&emsp;&emsp;简单说，微服务就是采用容器技术的面向服务架构。它依然使用”服务”作为功能单元，但是变成了轻量级实现，不需要新增服务器，只需要新建容器（一个进程），所以才叫做”微服务”。<br><br>&emsp;&emsp;微服务架构是一种软件架构风格，其中应用程序以一组小型、独立的服务构建，每个服务运行在自己的进程中，并使用轻量级通信机制进行通信。<br><br>&emsp;&emsp;一个微服务就是一个独立的进程。 这个进程可以运行在本机，也可以运行在别的服务器，或者在云端（比如云服务和云函数 FaaS）。<br><br>&emsp;&emsp;它的特点与面向服务架构是一样的，但因为更轻量级，所以功能的解耦和服务化可以做得更彻底。而且，它可以标准化，同样的容器不管在哪里运行，结果都是一样的，所以市场上有很多 SaaS 产品，提供标准化的微服务。<br><br>&emsp;&emsp;正是由于微服务这些突出的优点，这些年才会变得如此流行。它和容器技术、云服务等一起，一定会在未来的软件开发中，扮演越来越重要的角色。<br></p><h2 id="微服务的技术栈"><a href="#微服务的技术栈" class="headerlink" title="微服务的技术栈"></a>微服务的技术栈</h2><h4 id="docker-k8s"><a href="#docker-k8s" class="headerlink" title="docker &amp;&amp; k8s"></a>docker &amp;&amp; k8s</h4><p>&emsp;&emsp;首先，微服务的核心就是容器化技术，每一个微服务都需要以docker或者其他容器的方式进行使用，每一个服务都在一个独立的容器中。<br><br>&emsp;&emsp;2010年一位年轻小伙子在美国旧金山成立了一家名叫【dotCloud】的公司， 开发了 Docker的核心技术，从此开启了容器技术的时代。<br><br>&emsp;&emsp;后面 dotCloud 公司将自己的容器技术进行了简化和标准化，取名为 Docker，就是大家熟悉的鲸鱼 logo。<br><br>&emsp;&emsp;尽管Docker为容器化的应用程序提供了开放标准，但随着容器越来越多出现了一系列新问题：<br></p><ul><li>如何协调和调度这些容器</li><li>如何在升级应用程序的时候不会中断服务</li><li>如何监视应用程序的运行状况</li><li>如何批量重新启动容器内的程序<br><br>&emsp;&emsp;要解决这些问题，就需要容器编排技术，可以将众多的极其抽象，对外呈现出一台超级大机器，比如现在业界流行的k8s。<br><br>&emsp;&emsp;在业务发展初期只有几个微服务，这时用 Docker 就足够了，但随着业务规模逐渐扩大，容器越来越多，运维人员的工作越来越复杂，这个时候就需要编排系统解救运维人员。<br><br>&emsp;&emsp;换言之，在微服务架构中，使用Docker或其他容器打包发布应用，使用kubernetes扩展、运行、监控应用。<br><br>&emsp;&emsp;此外，没有k8s也可以使用docker，k8s非常复杂，在业务比较简单的时候可以放弃使用k8s<br><br>&emsp;&emsp;然而，需要注意的是，k8s是一个容器编排器，没有容器，没法编排。没有docker这类容器，就无法使用k8s，k8s主要还是和docker这些容器进行搭配，当然，其他容器也是可以的，比如Containerd <br></li></ul><h4 id="服务注册与发现"><a href="#服务注册与发现" class="headerlink" title="服务注册与发现"></a>服务注册与发现</h4><p>&emsp;&emsp;一个微服务架构的重中之重，除了docker就是服务注册与发现。<br><br>&emsp;&emsp;微服务之间才能相互调用完成整体的业务功能，如何在众多的微服务中找到正确的目标服务地址呢，如果服务的IP或者端口变了，那是否就需要对庞大的微服务们进行修改呢，这就需要服务发现的功能。<br><br>&emsp;&emsp;要发现服务，自然首先要注册服务，最常用的做法就是在服务提供者启动的时候就将地址上报给服务注册中心，这就是服务注册。<br><br>&emsp;&emsp;服务调用方通过订阅服务变更的通知，动态的接收到服务注册中心所推送的服务地址列表，想找哪个服务直接发送就可以了。<br><br>&emsp;&emsp;现在Spring Cloud和Spring Cloud Alibaba常用的服务注册与发现工作包括eureka和nacos等。<br></p><h4 id="配置管理"><a href="#配置管理" class="headerlink" title="配置管理"></a>配置管理</h4><p>&emsp;&emsp;在微服务架构中，一个微服务可能有很多个实例，每个实例的配置可能都不一样，比如数据库连接地址，数据库用户名密码等，如果每个实例都手动修改，那无疑是非常麻烦的，所以就需要配置管理。<br><br>&emsp;&emsp;配置管理就是将配置信息集中管理，每个实例启动的时候从配置管理中获取配置信息，这样就可以保证每个实例的配置信息都是一致的。<br><br>&emsp;&emsp;配置管理可以使用Spring Cloud Config或者Spring Cloud Alibaba Nacos等。<br></p><h4 id="服务容错"><a href="#服务容错" class="headerlink" title="服务容错"></a>服务容错</h4><p>&emsp;&emsp;在微服务架构中，一个服务可能会调用多个其他服务，如果其中一个服务出现故障，那么整个服务就会崩溃<br><br>&emsp;&emsp;任何服务都不能保证100%不出问题，生产环境复杂多变，服务运行过程中不可避免的发生各种故障（宕机、过载等等），工程师能够做的是在故障发生时尽可能降低影响范围、尽快恢复正常服务。<br><br>&emsp;&emsp;程序员为了避免被祭天，需要引入「熔断、隔离、限流和降级、超时机制」等「服务容错」的机制来保证服务持续可用性。<br><br>&emsp;&emsp;服务容错可以通过熔断、降级、限流等方式来实现，常用的工具有Hystrix、Sentinel等。<br></p><h4 id="服务安全"><a href="#服务安全" class="headerlink" title="服务安全"></a>服务安全</h4><p>&emsp;&emsp;在微服务架构中，服务之间的调用纷繁复杂，有些服务的敏感数据存在安全问题，「服务安全」就是对敏感服务采用安全鉴权机制，对服务的访问需要进行相应的身份验证和授权，防止数据泄露的风险，安全是一个长久的话题，在微服务中也有很多工作要做。<br><br>&emsp;&emsp;服务安全可以通过OAuth2、JWT等方式来实现，常用的工具有Spring Security、OAuth2等。<br></p><h4 id="API网关"><a href="#API网关" class="headerlink" title="API网关"></a>API网关</h4><p>&emsp;&emsp;在微服务架构中，服务之间的调用纷繁复杂，如果每个服务都暴露自己的API接口，那么调用方就需要知道每个服务的API接口，这无疑是非常麻烦的，所以就需要一个统一的入口，这就是API网关。<br><br>&emsp;&emsp;API网关就是将所有的API接口都集中在一个地方，调用方只需要调用API网关，API网关会根据请求的路径和参数，将请求转发到相应的服务，API网关还可以配合其他工具实现负载均衡、限流、鉴权、动态路由等功能。<br></p><h4 id="服务追踪"><a href="#服务追踪" class="headerlink" title="服务追踪"></a>服务追踪</h4><p>&emsp;&emsp;在微服务架构中，服务之间的调用纷繁复杂，如果出现故障，如何快速定位是哪个服务出现了问题呢？那么就需要定位问题，这就需要服务追踪。<br><br>&emsp;&emsp;服务追踪就是将每个请求的调用链路记录下来，这样就可以根据请求的调用链路来定位问题，常用的工具有Zipkin、SkyWalking等。<br></p><h4 id="服务监控"><a href="#服务监控" class="headerlink" title="服务监控"></a>服务监控</h4><p>&emsp;&emsp;此外，服务的运行过程难免需要对其性能等内容进行监控，因此，监控也是必不可少的。<br></p><h2 id="微服务的发展"><a href="#微服务的发展" class="headerlink" title="微服务的发展"></a>微服务的发展</h2><p>&emsp;&emsp;2011年，微服务的概念由Netflix等企业提出，他们需要一种更灵活、独立的服务模式，以满足大规模互联网应用的扩展性需求。与SOA相比，微服务是去中心化的，服务更小、独立，且通过HTTP、消息队列等协议通信。<br><br>&emsp;&emsp;2012-2015年：Netflix开源了一系列微服务相关的工具，这些工具构成了微服务生态系统的基础组件。<br></p><ul><li>Eureka（2012）：Netflix推出的服务注册和发现组件，允许微服务在启动时注册，并通过Eureka客户端进行相互发现。</li><li>Hystrix（2012）：Netflix推出的熔断器，用于处理服务调用失败和网络超时。</li><li>Ribbon（2012）：用于负载均衡的组件。</li><li>etc.<br><br>&emsp;&emsp;此外，2014年，Spring Cloud项目正式发布，整合Netflix的微服务工具，简化了Java开发者构建微服务的工作。<br><br>&emsp;&emsp;到2015年，Spring Cloud成为了微服务架构中流行的框架，提供着一整套解决方案，推动了微服务架构的大规模应用。<br><br>&emsp;&emsp;2017年，随着阿里巴巴开源了Nacos，这一款集服务发现、配置管理于一体的组件，替代了eureka的部分功能。Nacos能够提供更加灵活的配置管理和服务注册功能，并且支持AP和CP（即一致性和可用性）的权衡，逐渐在国内流行起来，替代了部分Eureka的使用场景。其他各型组件也是类似情况，替代方案逐渐增加。<br><br>&emsp;&emsp;2014年，Google开源了Kubernetes（简称K8s），这是一个容器编排工具，可以自动化管理容器化应用的部署、伸缩和运维。Kubernetes逐渐成为云原生应用的核心平台。<br><br>&emsp;&emsp;2017年，服务网格（Service Mesh）架构开始流行，Istio成为其代表工具。服务网格将服务间的通信逻辑（如负载均衡、熔断、流量控制等）从应用中剥离，交由一个独立的基础设施层管理。Istio使用Envoy作为数据平面，负责流量管理，而Istio本身作为控制平面。<br><br>&emsp;&emsp;2020年之后，Kubernetes和服务网格技术结合，成为了微服务架构的主流模式。通过Kubernetes进行容器编排，服务网格则负责微服务之间的通信、流量管理、监控和安全。<br><br>&emsp;&emsp;通过Helm这一Kubernetes的包管理工具，简化了应用的部署。<br></li></ul><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>&emsp;&emsp;总的来说呢，微服务架构现在正在变得更加成熟和普及，虽然随着Kubernetes + Istio的流行，传统的微服务框架如Spring Cloud逐渐被替代，但微服务架构的核心思想仍然存在，并且随着技术的不断进步，微服务架构将会变得更加灵活和高效。<br><br>&emsp;&emsp;而原先的框架如Spring Cloud和Spring Cloud Alibaba，其实也有一定的优势，模块丰富，技术成熟，方案完整，在许多场景下也有相当适用的一面。<br></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习笔记 </category>
+          
+          <category> 微服务学习笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 微服务 </tag>
+            
+            <tag> 理论知识 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>学习笔记—通过nginx对UDP做负载均衡</title>
+      <link href="/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E9%80%9A%E8%BF%87nginx%E5%AF%B9UDP%E5%81%9A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
+      <url>/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E9%80%9A%E8%BF%87nginx%E5%AF%B9UDP%E5%81%9A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</url>
+      
+        <content type="html"><![CDATA[<p>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习笔记 </category>
+          
+          <category> 杂项 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> UDP </tag>
+            
+            <tag> Nginx </tag>
+            
+            <tag> 负载均衡 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>2024年8月总结</title>
       <link href="/2024/09/02/2024%E5%B9%B48%E6%9C%88%E6%80%BB%E7%BB%93/"/>
       <url>/2024/09/02/2024%E5%B9%B48%E6%9C%88%E6%80%BB%E7%BB%93/</url>
