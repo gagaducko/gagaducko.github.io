@@ -22,7 +22,7 @@
     <meta name="description" content="微服务架构记录2——技术栈实践。注册中心与配置中心">
 <meta property="og:type" content="article">
 <meta property="og:title" content="学习笔记—微服务—技术栈实践(1)—注册中心与配置中心">
-<meta property="og:url" content="https://gagaducko.github.io/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-1-%E2%80%94%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E4%B8%8E%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/index.html">
+<meta property="og:url" content="https://gagaducko.github.io/2024/09/07/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-1-%E2%80%94%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E4%B8%8E%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/index.html">
 <meta property="og:site_name" content="gagaduck">
 <meta property="og:description" content="微服务架构记录2——技术栈实践。注册中心与配置中心">
 <meta property="og:locale" content="zh_CN">
@@ -30,8 +30,8 @@
 <meta property="og:image" content="https://gagaducko.github.io/imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%BE%AE%E6%9C%8D%E5%8A%A1_%E6%B3%A8%E5%86%8C%E4%B8%8E%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/eureka%E6%B3%A8%E5%86%8C%E4%BF%A1%E6%81%AF.png">
 <meta property="og:image" content="https://gagaducko.github.io/imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%BE%AE%E6%9C%8D%E5%8A%A1_%E6%B3%A8%E5%86%8C%E4%B8%8E%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/eureka_service.png">
 <meta property="og:image" content="https://gagaducko.github.io/imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%BE%AE%E6%9C%8D%E5%8A%A1_%E6%B3%A8%E5%86%8C%E4%B8%8E%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/eureka_%E5%AE%9E%E4%BE%8B.png">
-<meta property="article:published_time" content="2024-09-06T09:24:03.000Z">
-<meta property="article:modified_time" content="2024-09-07T10:07:31.068Z">
+<meta property="article:published_time" content="2024-09-07T10:27:31.000Z">
+<meta property="article:modified_time" content="2024-09-07T10:27:43.860Z">
 <meta property="article:author" content="gagaduck">
 <meta property="article:tag" content="微服务">
 <meta property="article:tag" content="注册中心">
@@ -218,8 +218,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-09-06 17:24" pubdate>
-          2024年9月6日 下午
+        <time datetime="2024-09-07 18:27" pubdate>
+          2024年9月7日 晚上
         </time>
       </span>
     
@@ -230,7 +230,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.3k 字
+          2.7k 字
         
       </span>
     
@@ -241,7 +241,7 @@
         
         
         
-          20 分钟
+          23 分钟
         
       </span>
     
@@ -286,8 +286,9 @@
                 <h2 id="注册中心"><a href="#注册中心" class="headerlink" title="注册中心"></a>注册中心</h2><h3 id="什么是注册中心"><a href="#什么是注册中心" class="headerlink" title="什么是注册中心"></a>什么是注册中心</h3><p>&emsp;&emsp;注册中心是Spring Cloud和Spring Cloud Alibaba系列的第一步。服务的注册与发现是最基本的操作。<br><br>&emsp;&emsp;在微服务中，注册中心主要体现为三种角色。首先是服务注册中心，也就是Registry，用于保存服务提供者的注册信息，当服务提供者的节点发生变更的时候，注册中心也会同步的变更，服务消费者在感知到这个变更后，会刷新本地内存中所缓存的服务节点列表。<br><br>&emsp;&emsp;第二就是服务提供者（server），服务提供者在自身启动的时候，向Registry注册服务，并向注册中心定期发送心跳来确保注册中心认为该服务还活着。<br><br>&emsp;&emsp;最后，是服务消费者，启动的时候，服务消费者会从注册中心订阅服务，把注册中心返回的服务节点列表缓存在本地内存中，由此来和服务提供者建立联系。<br><br>&emsp;&emsp;服务消费者从本地缓存的服务节点列表中，基于负载均衡算法选择一个服务提供者的示例来发起调用。<br></p>
 <h3 id="常见的注册中心与注册中心需要的功能"><a href="#常见的注册中心与注册中心需要的功能" class="headerlink" title="常见的注册中心与注册中心需要的功能"></a>常见的注册中心与注册中心需要的功能</h3><p>&emsp;&emsp;由此，对于一个服务注册中心来说，首先，需要有一个服务注册的API接口，让服务的提供者通过调用该接口完成服务注册。<br><br>&emsp;&emsp;需要一个心跳检查的接口，服务提供方定期通过该接口汇报自身的服务状态。<br><br>&emsp;&emsp;此外，还需要一些如服务的查询、变更查询、注销等接口。<br><br>&emsp;&emsp;常见的注册中心比如nacos，eureka，zookeeper，ETCD等等。此处详细留痕常用的spring cloud的eureka和spring cloud alibaba的nacos。<br></p>
 <h3 id="Eureka"><a href="#Eureka" class="headerlink" title="Eureka"></a>Eureka</h3><h4 id="什么是Eureka"><a href="#什么是Eureka" class="headerlink" title="什么是Eureka"></a>什么是Eureka</h4><p>&emsp;&emsp;Eureka是Netflix开源的服务发现框架，Spring Cloud对其进行了集成，并提供了良好的支持。Eureka分为Eureka Server和Eureka Client，Eureka Server是注册中心，Eureka Client是服务提供者和服务消费者。<br><br>&emsp;&emsp;Eureka Server需要配置一个端口，用于接收Eureka Client的注册请求，同时，Eureka Server需要配置一个地址，用于接收Eureka Client的查询请求。<br></p>
-<h4 id="Eureka的架构"><a href="#Eureka的架构" class="headerlink" title="Eureka的架构"></a>Eureka的架构</h4><p>&emsp;&emsp;从总体来说，Eureka是一个CS架构的东西。<br></p>
-<h4 id="Eureka的流程"><a href="#Eureka的流程" class="headerlink" title="Eureka的流程"></a>Eureka的流程</h4><h4 id="Eureka的实践"><a href="#Eureka的实践" class="headerlink" title="Eureka的实践"></a>Eureka的实践</h4><p>&emsp;&emsp;Eureka是集成进spring cloud了的，因此，使用起来非常简单。<br></p>
+<h4 id="Eureka的架构"><a href="#Eureka的架构" class="headerlink" title="Eureka的架构"></a>Eureka的架构</h4><p>&emsp;&emsp;从总体来说，Eureka是一个CS架构的东西。主要由两个组件组成，Eureka Server与Eureka Client。Eureka Server是服务注册中心，用于存储所有可用的服务实例信息。Eureka Client是应用程序的客户端，用于向Eureka Server注册服务并查找其他服务。<br><br>&emsp;&emsp;在Eureka中，每个服务都可以注册为一个Eureka Client，并将自己的信息注册到Eureka Server中。当服务启动时，它会向Eureka Server发送一个心跳，告诉Eureka Server自己还活着。如果Eureka Server在一段时间内没有收到心跳，它将自动将该服务从注册表中删除。<br></p>
+<h4 id="Eureka的流程"><a href="#Eureka的流程" class="headerlink" title="Eureka的流程"></a>Eureka的流程</h4><p>&emsp;&emsp;首先是启动Server。<br><br>&emsp;&emsp;接着是启动Client。<br><br>&emsp;&emsp;服务启动后，Client会向Server注册自己的信息，发送一个包含服务实例ID，服务主机名端口，服务健康状态，服务元数据登的POST请求。<br><br>&emsp;&emsp;当Eureka Server收到这些消息后，就会储存这些消息实例的信息到服务注册表里。<br><br>&emsp;&emsp;其他服务可以通过Eureka Client以负载均衡的方式发现其他可用实例并选择一个进行请求。<br><br>&emsp;&emsp;服务实例可能会在运行的过程中更改其状态，例如服务实例的健康状态可能会更改。当服务实例状态更改时，服务会向Eureka Server发送一个PUT请求，以更新其状态信息。Eureka Server将根据收到的信息更新服务实例的状态。<br><br>&emsp;&emsp;当服务实例停止时，服务实例会向Eureka Server发送一个DELETE请求，以从注册表中删除自己的信息。Eureka Server将根据收到的信息从注册表中删除该服务实例的信息。<br></p>
+<h4 id="Eureka的实践"><a href="#Eureka的实践" class="headerlink" title="Eureka的实践"></a>Eureka的实践</h4><p>&emsp;&emsp;Eureka是集成进spring cloud了的，因此，使用起来非常简单。<br></p>
 <h5 id="Eureka服务端"><a href="#Eureka服务端" class="headerlink" title="Eureka服务端"></a>Eureka服务端</h5><p>&emsp;&emsp;首先需要有一个Eureka的服务端。通过IDEA快速创建Spring Boot项目，并且选择Eureka服务端，也可在Pom文件添加响应的依赖。（此外，还需要web相关的依赖，来确保eureka的服务端可以正常使用）<br><br>&emsp;&emsp;创建成功后，在spring boot的启动类上加入Eureka服务端的注解。<br></p>
 <figure class="highlight less"><figcaption><span>[title] [lang:language] [url] [link text] [additional options]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@SpringBootApplication</span><br><span class="hljs-variable">@EnableEurekaServer</span><br>public class EurekaServerApplication &#123;<br>    <span class="hljs-selector-tag">public</span> <span class="hljs-selector-tag">static</span> <span class="hljs-selector-tag">void</span> <span class="hljs-selector-tag">main</span>(String[] args) &#123;<br>        <span class="hljs-selector-tag">SpringApplication</span><span class="hljs-selector-class">.run</span>(EurekaServerApplication.class, args);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>&emsp;&emsp;配置文件如下：<br></p>
@@ -310,7 +311,7 @@
 <figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dos">startup.<span class="hljs-built_in">cmd</span> -m standalone<br></code></pre></td></tr></table></figure>
 <p>&emsp;&emsp;启动完成后，访问<a target="_blank" rel="noopener" href="http://localhost:8848/nacos">http://localhost:8848/nacos</a><br><br>&emsp;&emsp;即可看到Nacos的界面。<br><br>&emsp;&emsp;此外，还可以采用Docker或Kubernetes的相关方式来安装启动nacos，暂按不表。<br></p>
 <h4 id="Nacos的注册"><a href="#Nacos的注册" class="headerlink" title="Nacos的注册"></a>Nacos的注册</h4><h4 id="Nacos的Open-API"><a href="#Nacos的Open-API" class="headerlink" title="Nacos的Open API"></a>Nacos的Open API</h4><h4 id="Nacos的编程方式"><a href="#Nacos的编程方式" class="headerlink" title="Nacos的编程方式"></a>Nacos的编程方式</h4><h3 id="Nacos与Eureka的优劣"><a href="#Nacos与Eureka的优劣" class="headerlink" title="Nacos与Eureka的优劣"></a>Nacos与Eureka的优劣</h3><p>&emsp;&emsp;Eureka专注于服务的注册与发现，而nacos即是注册中心，也是配置中心，支持动态的配置管理。在生态上，Nacos除了与Spring Cloud有良好的兼容性外，同时也支持Spring Cloud Alibaba生态系统，也适合在Kubernetes环境下部署使用。<br><br>&emsp;&emsp;此外，在扩展性上，Eureka支持水平扩展，在CAP中是AP模型，遵循高可用性，即便是部分节点通信失败也能继续注册和发现，缺点在于极端情况下节点的数据可能就会不一样了，短时间内不同步。而Nacos则支持AP与CP两种模式，即可选择高可用，也可以选择强一致。Nacos 在集群模式下可以通过 Raft 一致性协议保证强一致性<br><br>&emsp;&emsp;另外，Eureka相对来说比较轻量级，适合服务数量较少的场景，而Nacos则适合大规模的微服务集群开发，内存和储存消耗较高但是性能和功能的扩展性更强，对于多语言的支持也更好。<br></p>
-<h2 id="配置中心"><a href="#配置中心" class="headerlink" title="配置中心"></a>配置中心</h2><h3 id="Spring-Cloud-Config"><a href="#Spring-Cloud-Config" class="headerlink" title="Spring Cloud Config"></a>Spring Cloud Config</h3><h3 id="Nacos-1"><a href="#Nacos-1" class="headerlink" title="Nacos"></a>Nacos</h3><p>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br></p>
+<h2 id="配置中心"><a href="#配置中心" class="headerlink" title="配置中心"></a>配置中心</h2><h3 id="Spring-Cloud-Config"><a href="#Spring-Cloud-Config" class="headerlink" title="Spring Cloud Config"></a>Spring Cloud Config</h3><h3 id="Nacos-1"><a href="#Nacos-1" class="headerlink" title="Nacos"></a>Nacos</h3><p>&emsp;&emsp;<br></p>
 
                 
               </div>
@@ -368,7 +369,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>学习笔记—微服务—技术栈实践(1)—注册中心与配置中心</div>
-      <div>https://gagaducko.github.io/2024/09/06/学习笔记—微服务—技术栈实践-1-—注册中心与配置中心/</div>
+      <div>https://gagaducko.github.io/2024/09/07/学习笔记—微服务—技术栈实践-1-—注册中心与配置中心/</div>
     </div>
     <div class="license-meta">
       
@@ -380,7 +381,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年9月6日</div>
+          <div>2024年9月7日</div>
         </div>
       
       
@@ -412,18 +413,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-2-%E2%80%94%E7%BD%91%E5%85%B3/" title="学习笔记—微服务—技术栈实践(2)—网关">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">学习笔记—微服务—技术栈实践(2)—网关</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="学习笔记—微服务—基础知识">
-                        <span class="hidden-mobile">学习笔记—微服务—基础知识</span>
+                      <a href="/2024/09/07/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-6-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%9D%83%E9%99%90%E6%96%B9%E6%A1%88/" title="学习笔记—微服务—技术栈实践(7)-微服务的权限方案">
+                        <span class="hidden-mobile">学习笔记—微服务—技术栈实践(7)-微服务的权限方案</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
