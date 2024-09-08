@@ -27,7 +27,7 @@
 <meta property="og:description" content="微服务架构记录4——技术栈实践。微服务各服务之间的相互调用。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-09-07T10:14:52.000Z">
-<meta property="article:modified_time" content="2024-09-07T10:26:12.265Z">
+<meta property="article:modified_time" content="2024-09-08T16:50:47.544Z">
 <meta property="article:author" content="gagaduck">
 <meta property="article:tag" content="微服务">
 <meta property="article:tag" content="OpenFeign">
@@ -224,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          976 字
         
       </span>
     
@@ -235,7 +235,7 @@
         
         
         
-          1 分钟
+          9 分钟
         
       </span>
     
@@ -277,7 +277,23 @@
             
               <div class="markdown-body">
                 
-                
+                <h2 id="微服务之间的相互调用"><a href="#微服务之间的相互调用" class="headerlink" title="微服务之间的相互调用"></a>微服务之间的相互调用</h2><p>&emsp;&emsp;服务多了，端口IP自然也就多了，用传统的带上IP和端口的HTTP进行Request甚至用更久远的UDP来进行通信，显然是不合理的。<br><br>&emsp;&emsp;尤其是对于微服务架构来说，很多功能需要调用多项服务才能完成，这时候，服务之间如何相互调用就成为了一个相当关键的问题，<br><br>&emsp;&emsp;首先，如果直接采用RestTemplate的方式进行服务之间的通信怎么样呢？<br><br>&emsp;&emsp;如下代码所示：<br></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-meta">@Bean</span><br><span class="hljs-keyword">public</span> <span class="hljs-title class_">RestTemplate</span> <span class="hljs-title function_">getRestTemplate</span>(<span class="hljs-params"></span>)&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RestTemplate</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-meta">@Autowired</span><br><span class="hljs-keyword">private</span> <span class="hljs-title class_">RestTemplate</span> restTemplate;<br><br><span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">&quot;/test&quot;</span>)<br><span class="hljs-keyword">public</span> <span class="hljs-title class_">String</span> <span class="hljs-title function_">test</span>(<span class="hljs-params"></span>)&#123;<br>    <span class="hljs-title class_">String</span> url = <span class="hljs-string">&quot;http://localhost:8081/test&quot;</span>;<br>    <span class="hljs-title class_">String</span> result = restTemplate.<span class="hljs-title function_">getForObject</span>(url, <span class="hljs-title class_">String</span>.<span class="hljs-property">class</span>);<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这种方式虽然可行，但是代码显得有些冗余，而且如果需要调用多个服务，那么代码就会显得十分混乱，相当于是做了一个硬编码，IP地址等都有了，如果服务提供方的地址端口发生了变化，该怎么做呢？当然是手动修改代码，如果有多个实例呢？通过Nginx实现服务的负载均衡？显然是不美丽的？实例增加了呢？所以，问题是很多的。<br><br>&emsp;&emsp;因此，SpringCloud提供了一个叫做OpenFeign的组件，这个组件非常好用。<br><br>&emsp;&emsp;可以简化RestTemplate的调用，使得代码看起来更加简洁。更为重要的是，通过OpenFeign，可以解决很多的上述的问题，具体在后文中进行实践与分析。<br></p>
+<h2 id="Restful风格的调用"><a href="#Restful风格的调用" class="headerlink" title="Restful风格的调用"></a>Restful风格的调用</h2><p>&emsp;&emsp;在了解OpenFeign之前，首先需要对于Restful风格的调用做了解。<br></p>
+<h2 id="OpenFeign"><a href="#OpenFeign" class="headerlink" title="OpenFeign"></a>OpenFeign</h2><p>&emsp;&emsp;OpenFeign是SpringCloud的一个组件。他的中心思想在于通过提供一种声明式、注解驱动的接口化服务调用方式，极大地简化了微服务架构中的RESTful API调用以及服务间通信的复杂性。它使得开发者可以聚焦于业务逻辑本身，如同调用本地方法一样便捷地调用远程服务，而不必深陷于HTTP请求细节的实现。<br></p>
+<h3 id="OpenFeign的简单使用"><a href="#OpenFeign的简单使用" class="headerlink" title="OpenFeign的简单使用"></a>OpenFeign的简单使用</h3><p>&emsp;&emsp;首先，需要在pom.xml文件中引入OpenFeign的依赖，如下所示：<br></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.cloud<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-cloud-starter-openfeign<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;然后，在启动类上需要添加上@EnableFeignClients注解，如下所示：<br></p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@SpringBootApplication</span><br><span class="hljs-variable">@EnableFeignClients</span><br>public class Application &#123;<br>    <span class="hljs-selector-tag">public</span> <span class="hljs-selector-tag">static</span> <span class="hljs-selector-tag">void</span> <span class="hljs-selector-tag">main</span>(String[] args) &#123;<br>        <span class="hljs-selector-tag">SpringApplication</span><span class="hljs-selector-class">.run</span>(OrderApplication.class, args);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;接着，创建一个Feign的客户端接口，通过@FeignClient做注解标记，如下所示：<br></p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@FeignClient</span>(<span class="hljs-string">&quot;user-service&quot;</span>)<br>public interface UserFeignClient &#123;<br>    <span class="hljs-variable">@GetMapping</span>(<span class="hljs-string">&quot;/user/&#123;id&#125;&quot;</span>)<br>    User <span class="hljs-built_in">getUserById</span>(<span class="hljs-variable">@PathVariable</span>(<span class="hljs-string">&quot;id&quot;</span>) Long id);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;最后，在需要调用服务的地方，注入UserFeignClient，并调用其方法即可，如下所示：<br></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Service</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">OrderService</span> &#123;<br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> UserFeignClient userFeignClient;<br><br>    <span class="hljs-keyword">public</span> Order getOrderById(<span class="hljs-built_in">Long</span> id) &#123;<br>        <span class="hljs-comment">// 调用user-service的getUserById方法获取用户信息</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;由此，便实现了对于该服务的一个调用。<br><br>&emsp;&emsp;值得一提的是，OpenFeign集成了Ribbon这样一个客户端负载均衡器，使得OpenFeign发起的HTTP请求可以自动地在多个服务实例之间进行一个负载均衡。如果想要自定义这样一个负载均衡策略，则需要引入ribbon再做进一步的操作。<br></p>
+<h2 id="消息中间件"><a href="#消息中间件" class="headerlink" title="消息中间件"></a>消息中间件</h2><p>&emsp;&emsp;对于微服务之间的消息通信来说，如果只是靠着OpenFeign这样的http客户端来实现微服务之间的通信，在很多地方是存在缺口的。<br><br>&emsp;&emsp;尤其是对于一些高并发、大量甚至海量数据的传递来说，是有问题的，OpenFeign进行服务之间的同步调用，而也需要将耗时长量大的消息放入消息队列做异步的处理也是相当重要的，因此，对于消息中间件的详细使用见后文内容。<br></p>
+
                 
               </div>
             
