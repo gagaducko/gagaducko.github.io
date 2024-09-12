@@ -22,12 +22,12 @@
     <meta name="description" content="微服务架构记录4——技术栈实践。微服务各服务之间的相互调用。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="学习笔记—微服务—技术栈实践(3)—微服务之间的相互调用">
-<meta property="og:url" content="https://gagaducko.github.io/2024/09/07/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-3-%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E9%97%B4%E7%9A%84%E7%9B%B8%E4%BA%92%E8%B0%83%E7%94%A8/index.html">
+<meta property="og:url" content="https://gagaducko.github.io/2024/09/12/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-3-%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E9%97%B4%E7%9A%84%E7%9B%B8%E4%BA%92%E8%B0%83%E7%94%A8/index.html">
 <meta property="og:site_name" content="gagaduck">
 <meta property="og:description" content="微服务架构记录4——技术栈实践。微服务各服务之间的相互调用。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-09-07T10:14:52.000Z">
-<meta property="article:modified_time" content="2024-09-08T16:50:47.544Z">
+<meta property="article:published_time" content="2024-09-12T15:01:52.000Z">
+<meta property="article:modified_time" content="2024-09-12T15:20:27.565Z">
 <meta property="article:author" content="gagaduck">
 <meta property="article:tag" content="微服务">
 <meta property="article:tag" content="OpenFeign">
@@ -212,8 +212,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-09-07 18:14" pubdate>
-          2024年9月7日 晚上
+        <time datetime="2024-09-12 23:01" pubdate>
+          2024年9月12日 晚上
         </time>
       </span>
     
@@ -224,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          976 字
+          1.9k 字
         
       </span>
     
@@ -235,7 +235,7 @@
         
         
         
-          9 分钟
+          16 分钟
         
       </span>
     
@@ -281,8 +281,20 @@
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-meta">@Bean</span><br><span class="hljs-keyword">public</span> <span class="hljs-title class_">RestTemplate</span> <span class="hljs-title function_">getRestTemplate</span>(<span class="hljs-params"></span>)&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RestTemplate</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-meta">@Autowired</span><br><span class="hljs-keyword">private</span> <span class="hljs-title class_">RestTemplate</span> restTemplate;<br><br><span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">&quot;/test&quot;</span>)<br><span class="hljs-keyword">public</span> <span class="hljs-title class_">String</span> <span class="hljs-title function_">test</span>(<span class="hljs-params"></span>)&#123;<br>    <span class="hljs-title class_">String</span> url = <span class="hljs-string">&quot;http://localhost:8081/test&quot;</span>;<br>    <span class="hljs-title class_">String</span> result = restTemplate.<span class="hljs-title function_">getForObject</span>(url, <span class="hljs-title class_">String</span>.<span class="hljs-property">class</span>);<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>&emsp;&emsp;这种方式虽然可行，但是代码显得有些冗余，而且如果需要调用多个服务，那么代码就会显得十分混乱，相当于是做了一个硬编码，IP地址等都有了，如果服务提供方的地址端口发生了变化，该怎么做呢？当然是手动修改代码，如果有多个实例呢？通过Nginx实现服务的负载均衡？显然是不美丽的？实例增加了呢？所以，问题是很多的。<br><br>&emsp;&emsp;因此，SpringCloud提供了一个叫做OpenFeign的组件，这个组件非常好用。<br><br>&emsp;&emsp;可以简化RestTemplate的调用，使得代码看起来更加简洁。更为重要的是，通过OpenFeign，可以解决很多的上述的问题，具体在后文中进行实践与分析。<br></p>
-<h2 id="Restful风格的调用"><a href="#Restful风格的调用" class="headerlink" title="Restful风格的调用"></a>Restful风格的调用</h2><p>&emsp;&emsp;在了解OpenFeign之前，首先需要对于Restful风格的调用做了解。<br></p>
-<h2 id="OpenFeign"><a href="#OpenFeign" class="headerlink" title="OpenFeign"></a>OpenFeign</h2><p>&emsp;&emsp;OpenFeign是SpringCloud的一个组件。他的中心思想在于通过提供一种声明式、注解驱动的接口化服务调用方式，极大地简化了微服务架构中的RESTful API调用以及服务间通信的复杂性。它使得开发者可以聚焦于业务逻辑本身，如同调用本地方法一样便捷地调用远程服务，而不必深陷于HTTP请求细节的实现。<br></p>
+<h2 id="Restful风格的调用"><a href="#Restful风格的调用" class="headerlink" title="Restful风格的调用"></a>Restful风格的调用</h2><p>&emsp;&emsp;在了解OpenFeign之前，首先需要对于Restful风格的调用做了解。<br><br>&emsp;&emsp;所谓RESTful调用就是基于REST（Representational State Transfer）架构风格的网络服务调用方式。主要用于 Web 服务之间的通信，强调资源的表示、状态转移和无状态通信。<br><br>&emsp;&emsp;对于RESTful架构来说，一个核心的概念是资源（Resource），所有的内容都被视为资源，比如用户、订单、文件等等，通常会通过URL来标识，比如&#x2F;user&#x2F;1就表示ID是1的用户，&#x2F;order&#x2F;12就表示ID为12的订单。<br><br>&emsp;&emsp;另外，RESTful API 使用 HTTP 动词来定义对资源的操作。比如GET是获取资源，POST是创建资源、PUT是创建新资源、DELETE是删除等等。<br><br>&emsp;&emsp;比如，GET &#x2F;user&#x2F;1就是获取用户为1的资源信息。<br><br>&emsp;&emsp;RESTful 服务是无状态的，即每个请求都是独立的，不依赖于之前的请求。所有需要的信息（如认证信息、资源标识等）都应包含在每个请求中。<br><br>&emsp;&emsp;RESTful API 会以不同的表现形式返回资源，如 JSON、XML 等。客户端通过解析这些表现形式，获取资源的状态。<br><br>&emsp;&emsp;RESTful 调用使用 HTTP 状态码来表示操作的结果：<br><br>&emsp;&emsp;200 OK：请求成功，返回资源。<br><br>&emsp;&emsp;201 Created：请求成功，并创建了一个新的资源。<br><br>&emsp;&emsp;400 Bad Request：请求无效，服务器无法理解请求的内容。<br><br>&emsp;&emsp;401 Unauthorized：请求需要身份验证。<br><br>&emsp;&emsp;403 Forbidden：服务器拒绝请求。<br><br>&emsp;&emsp;404 Not Found：请求的资源不存在。<br><br>&emsp;&emsp;500 Internal Server Error：服务器内部错误。<br><br>&emsp;&emsp;总结来说，RESTful 调用是一种简洁、直观的 API 设计风格，基于 HTTP 协议，通过标准的 HTTP 方法和状态码，清晰地定义资源的操作。可以说，RESTful是如何通过HTTP进行WEB服务设计的一种最佳实践。<br></p>
+<h2 id="HTTP和Feign"><a href="#HTTP和Feign" class="headerlink" title="HTTP和Feign"></a>HTTP和Feign</h2><p>&emsp;&emsp;Feign是对RESTful API的客户端的封装调用，帮助开发者更轻松地和RESTful服务进行交互。<br>&emsp;&emsp;HTTP 和 Feign 之间的关联和区别主要体现在它们用于服务通信的方式上。HTTP 是底层的网络协议，而 Feign 是一个基于 HTTP 的声明式 Web 服务客户端。<br><br>&emsp;&emsp;Feign基于HTTP协议发出请求处理响应，但是简化了 HTTP 请求的代码。Feign 允许开发者通过声明式的方式定义接口，而不用手动处理底层 HTTP 请求的细节。<br><br>&emsp;&emsp;所以，简单的说，Feign的本质就是在HTTP之上进行了一层封装，简化了开发工作。<br><br>&emsp;&emsp;做个HTTPClient发送HTTP请求和通过Feign发送请求的对比：<br></p>
+<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs vbscript">HttpClient client = HttpClient.newHttpClient();<br>HttpRequest <span class="hljs-built_in">request</span> = HttpRequest.newBuilder()<br>    .uri(URI.create(<span class="hljs-string">&quot;http://example.com/users/1&quot;</span>))<br>    .build();<br>HttpResponse&lt;String&gt; <span class="hljs-built_in">response</span> = client.send(<span class="hljs-built_in">request</span>, HttpResponse.BodyHandlers.of<span class="hljs-built_in">String</span>());<br>System.out.println(<span class="hljs-built_in">response</span>.body());<br></code></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">UserClient</span> &#123;<br>    <span class="hljs-meta">@RequestLine(<span class="hljs-string">&quot;GET /users/&#123;id&#125;&quot;</span>)</span><br>    User getUserById(<span class="hljs-meta">@Param(<span class="hljs-string">&quot;id&quot;</span>)</span> <span class="hljs-built_in">Long</span> id);<br>&#125;<br><br><span class="hljs-comment">// Feign 客户端构造</span><br>UserClient client = Feign.builder().target(UserClient.<span class="hljs-keyword">class</span>, <span class="hljs-string">&quot;http://example.com&quot;</span>);<br>User user = client.getUserById(<span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure>
+<p>最后，用一个图解来解释RESTful API、HTTP和Feign之间的关系：<br></p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs gherkin">           RESTful API<br>        (设计规范，基于HTTP)<br>               ↑<br>               |<span class="hljs-string"></span><br><span class="hljs-string">    +------------------------+</span><br><span class="hljs-string">    </span>|<span class="hljs-string">        HTTP 协议        </span>|<br>    +------------------------+<br>       ↑              ↑<br>       |<span class="hljs-string">              </span>|<br>  Feign 客户端      HttpClient等<br>（封装了HTTP调用）  （直接调用HTTP）<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="OpenFeign"><a href="#OpenFeign" class="headerlink" title="OpenFeign"></a>OpenFeign</h2><p>&emsp;&emsp;OpenFeign是SpringCloud的一个组件。他的中心思想在于通过提供一种声明式、注解驱动的接口化服务调用方式，极大地简化了微服务架构中的RESTful API调用以及服务间通信的复杂性。它使得开发者可以聚焦于业务逻辑本身，如同调用本地方法一样便捷地调用远程服务，而不必深陷于HTTP请求细节的实现。<br><br>&emsp;&emsp;OpenFeign有以下主要特点：<br></p>
+<ol>
+<li>声明式HTTP客户端：通过定义接口和注解，可以轻松地发起HTTP请求，并自动处理响应。</li>
+<li>支持Spring MVC注解：可以直接使用Spring MVC的注解，如@GetMapping、@PostMapping等，来定义请求的URL、请求方法、请求参数等。</li>
+<li>支持负载均衡：与Ribbon集成，可以自动实现服务实例的负载均衡。</li>
+<li>支持Hystrix熔断：与Hystrix集成，可以自动实现服务调用的熔断保护。</li>
+</ol>
 <h3 id="OpenFeign的简单使用"><a href="#OpenFeign的简单使用" class="headerlink" title="OpenFeign的简单使用"></a>OpenFeign的简单使用</h3><p>&emsp;&emsp;首先，需要在pom.xml文件中引入OpenFeign的依赖，如下所示：<br></p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.cloud<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-cloud-starter-openfeign<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
 <p>&emsp;&emsp;然后，在启动类上需要添加上@EnableFeignClients注解，如下所示：<br></p>
@@ -348,7 +360,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>学习笔记—微服务—技术栈实践(3)—微服务之间的相互调用</div>
-      <div>https://gagaducko.github.io/2024/09/07/学习笔记—微服务—技术栈实践-3-—微服务之间的相互调用/</div>
+      <div>https://gagaducko.github.io/2024/09/12/学习笔记—微服务—技术栈实践-3-—微服务之间的相互调用/</div>
     </div>
     <div class="license-meta">
       
@@ -360,7 +372,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年9月7日</div>
+          <div>2024年9月12日</div>
         </div>
       
       
@@ -392,18 +404,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/09/07/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-4-%E2%80%94%E7%BD%91%E5%85%B3-Nacos%E7%9A%84%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1/" title="学习笔记—微服务—技术栈实践(4)—网关+Nacos的动态路由">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">学习笔记—微服务—技术栈实践(4)—网关+Nacos的动态路由</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/09/06/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-2-%E2%80%94%E7%BD%91%E5%85%B3/" title="学习笔记—微服务—技术栈实践(2)—网关">
-                        <span class="hidden-mobile">学习笔记—微服务—技术栈实践(2)—网关</span>
+                      <a href="/2024/09/11/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%A6%BB%E7%BA%BF%E7%8E%AF%E5%A2%83%E4%B8%8B%E5%AE%89%E8%A3%85Docker/" title="学习笔记—离线环境下安装Docker">
+                        <span class="hidden-mobile">学习笔记—离线环境下安装Docker</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
