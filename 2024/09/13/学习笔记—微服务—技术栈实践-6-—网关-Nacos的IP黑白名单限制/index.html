@@ -1,0 +1,685 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/imgs/icon.ico">
+  <link rel="icon" href="/imgs/icon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="gagaduck">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="微服务架构记录7——技术栈实践。网关、过滤器+Nacos的IP黑白名单限制。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记—微服务—技术栈实践(6)—网关过滤器+Nacos的IP黑白名单限制">
+<meta property="og:url" content="https://gagaducko.github.io/2024/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-6-%E2%80%94%E7%BD%91%E5%85%B3-Nacos%E7%9A%84IP%E9%BB%91%E7%99%BD%E5%90%8D%E5%8D%95%E9%99%90%E5%88%B6/index.html">
+<meta property="og:site_name" content="gagaduck">
+<meta property="og:description" content="微服务架构记录7——技术栈实践。网关、过滤器+Nacos的IP黑白名单限制。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-09-13T08:18:28.000Z">
+<meta property="article:modified_time" content="2024-09-15T07:27:57.280Z">
+<meta property="article:author" content="gagaduck">
+<meta property="article:tag" content="微服务">
+<meta property="article:tag" content="网关">
+<meta property="article:tag" content="Nacos">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>学习笔记—微服务—技术栈实践(6)—网关过滤器+Nacos的IP黑白名单限制 - gagaduck</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"gagaducko.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>嘎嘎鸭</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="学习笔记—微服务—技术栈实践(6)—网关过滤器+Nacos的IP黑白名单限制"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-09-13 16:18" pubdate>
+          2024年9月13日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">学习笔记—微服务—技术栈实践(6)—网关过滤器+Nacos的IP黑白名单限制</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="网关过滤器"><a href="#网关过滤器" class="headerlink" title="网关过滤器"></a>网关过滤器</h2><p>&emsp;&emsp;前面有提到，如果用较为简洁的语言来阐述网关，几乎就等同于路由转发+过滤器。路由得转发、容错这一块的内容已经有所提及，该节记录一下网关的过滤器，以及如何使用网关+Nacos 实现一个 IP 黑白名单的访问限制。<br><br>&emsp;&emsp;Spring Cloud Gateway 的过滤器根据作用范围可以分为 GatewayFilter 和 GlobalFilter 两种。<br><br>&emsp;&emsp;GatewayFilter 是网关过滤器，是需要通过 spring.cloud.routes.filters 配置在具体路由下，只作用在当前路由上或通过 spring.cloud.default-filters 配置在全局，作用在所有路由上的。<br><br>&emsp;&emsp;GlobalFilter 则是全局过滤器，不需要在配置文件中配置，作用在所有的路由上，最终通过 GatewayFilterAdapter 包装成 GatewayFilterChain 可识别的过滤器，是网关的核心过滤器，作用在每个路由上，不需要配置系统初始化就可以加载。<br><br>&emsp;&emsp;对于 GatewayFilter 网关过滤器来说，主要是用于拦截并处理 web 请求，用于切割业务，比如把安全等内容切割出来进行过滤，此处不多赘述。<br><br>&emsp;&emsp;而全局过滤器，则是将请求的业务及路由的 URI 转换为真是业务服务请求地址的核心过滤器。<br><br>&emsp;&emsp;这两种过滤器自带许多比较实用的过滤方法，但在有些情况下，会更希望使用自己实现自定义的过滤器。<br><br>&emsp;&emsp;对于自定义的过滤器来说，有多种实现方法。比如实现两个接口，一个是 GatewayFilter，一个是 Ordered，如下所示为一个自定义过滤器的示例：<br></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AuthGlobalFilter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">GlobalFilter</span>, Ordered &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Logger</span> <span class="hljs-variable">LOGGER</span> <span class="hljs-operator">=</span> LoggerFactory.getLogger(AuthGlobalFilter.class);<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Mono&lt;Void&gt; <span class="hljs-title function_">filter</span><span class="hljs-params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> &#123;<br>        <span class="hljs-comment">// 如果token为空，则八行</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">token</span> <span class="hljs-operator">=</span> exchange.getRequest().getHeaders().getFirst(<span class="hljs-string">&quot;Authorization&quot;</span>);<br>        <span class="hljs-keyword">if</span> (StrUtil.isEmpty(token)) &#123;<br>            <span class="hljs-keyword">return</span> chain.filter(exchange);<br>        &#125;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">//从token中解析用户信息并设置到Header中去</span><br>            <span class="hljs-type">String</span> <span class="hljs-variable">realToken</span> <span class="hljs-operator">=</span> token.replace(<span class="hljs-string">&quot;GaGaDuck: &quot;</span>, <span class="hljs-string">&quot;&quot;</span>);<br>            <span class="hljs-type">JWSObject</span> <span class="hljs-variable">jwsObject</span> <span class="hljs-operator">=</span> JWSObject.parse(realToken);<br>            <span class="hljs-type">String</span> <span class="hljs-variable">userStr</span> <span class="hljs-operator">=</span> jwsObject.getPayload().toString();<br>            <span class="hljs-type">ServerHttpRequest</span> <span class="hljs-variable">request</span> <span class="hljs-operator">=</span> exchange.getRequest().mutate().header(<span class="hljs-string">&quot;user&quot;</span>, userStr).build();<br>            exchange = exchange.mutate().request(request).build();<br>        &#125; <span class="hljs-keyword">catch</span> (ParseException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>        <span class="hljs-keyword">return</span> chain.filter(exchange);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getOrder</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;这样一个过滤器用于过滤全局的用户，并将登陆用户的 JWT 信息转化为用户信息。检查请求中是否包含 Authorization 头，如果存在，则解析 JWT 并从中提取用户信息，然后将其设置到请求的 Header 中。还提供了一个 getOrder 方法来定义过滤器的执行顺序。<br><br>&emsp;&emsp;也可以通过 WebFilter 这个接口进行实现，用于处理异步非阻塞的 HTTP 请求，比如：<br></p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs haxe"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-title class_"><span class="hljs-keyword">class</span> <span class="hljs-title">IgnoreUrlsRemoveJwtFilter</span> <span class="hljs-keyword"><span class="hljs-keyword">implements</span> <span class="hljs-type">WebFilter</span></span> </span>&#123;<br><br>    <span class="hljs-meta">@Resource</span><br>    <span class="hljs-keyword">private</span> IgnoreUrlsConfig ignoreUrlsConfig;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Mono&lt;<span class="hljs-keyword">Void</span>&gt; filter(ServerWebExchange exchange, WebFilterChain chain) &#123;<br>        System.out.println(<span class="hljs-string">&quot;==================进入到了白名单路径访问的过滤器中==============&quot;</span>);<br>        ServerHttpRequest request = exchange.getRequest();<br>        URI uri = request.getURI();<br>        PathMatcher pathMatcher = <span class="hljs-keyword">new</span><span class="hljs-type"></span> AntPathMatcher();<br>        <span class="hljs-comment">//白名单路径移除JWT请求头</span><br>        List&lt;<span class="hljs-keyword">String</span>&gt; ignoreUrls = ignoreUrlsConfig.getUrls();<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">String</span> ignoreUrl : <span class="hljs-type">ignoreUrls</span>) &#123;<br>            <span class="hljs-keyword">if</span> (pathMatcher.match(ignoreUrl, uri.getPath())) &#123;<br>                request = exchange.getRequest().mutate().header(<span class="hljs-string">&quot;Authorization&quot;</span>, <span class="hljs-string">&quot;&quot;</span>).build();<br>                exchange = exchange.mutate().request(request).build();<br>                <span class="hljs-keyword">return</span> chain.filter(exchange);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> chain.filter(exchange);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;如上是一个检查请求的 URI 是否在白名单中的过滤器，如果在白名单中，便移除请求的 HWT 认证头。此外，还可以在 security 的过滤链中可以设置其的过滤器执行顺序：<br></p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-comment">// security的过滤链</span><br><span class="hljs-variable">@Bean</span><br>public SecurityWebFilterChain <span class="hljs-built_in">springSecurityFilterChain</span>(ServerHttpSecurity http) &#123;<br>    <span class="hljs-selector-tag">http</span><span class="hljs-selector-class">.oauth2ResourceServer</span>(oauth2 -&gt; oauth2<br>                    .<span class="hljs-built_in">jwt</span>(jwt -&gt; jwt<br>                            .<span class="hljs-built_in">jwtAuthenticationConverter</span>(<span class="hljs-built_in">jwtAuthenticationConverter</span>())<br>                    )<br>                    .<span class="hljs-built_in">authenticationEntryPoint</span>(restAuthenticationEntryPoint)<br>            );<br>    <span class="hljs-comment">// 增加过滤器过滤忽略的白名单Url</span><br>    <span class="hljs-selector-tag">http</span><span class="hljs-selector-class">.addFilterBefore</span>(ignoreUrlsRemoveJwtFilter, SecurityWebFiltersOrder.AUTHENTICATION)<br>            <span class="hljs-comment">// 增加过滤器过滤菜单校验的请求</span><br>            <span class="hljs-selector-class">.addFilterBefore</span>(menuFilter, SecurityWebFiltersOrder.AUTHORIZATION)<br>            <span class="hljs-selector-class">.authorizeExchange</span>(exchange -&gt; exchange<br>                    <span class="hljs-comment">// 直接在properties中配置的白名单</span><br>                    .<span class="hljs-built_in">pathMatchers</span>(ArrayUtil.<span class="hljs-built_in">toArray</span>(ignoreUrlsConfig.<span class="hljs-built_in">getUrls</span>(),String.class)).<span class="hljs-built_in">permitAll</span>()<br>                    <span class="hljs-comment">// 通过鉴权管理器配置的放行权限名单</span><br>                    .<span class="hljs-built_in">anyExchange</span>().<span class="hljs-built_in">access</span>(authorizationManager))<br>            <span class="hljs-selector-class">.exceptionHandling</span>(exceptionHandling -&gt; exceptionHandling<br>                    <span class="hljs-comment">// 返回未授权处理的信息</span><br>                    .<span class="hljs-built_in">accessDeniedHandler</span>(restfulAccessDeniedHandler)<br>                    <span class="hljs-comment">// 返回未未认证处理</span><br>                    .<span class="hljs-built_in">authenticationEntryPoint</span>(restAuthenticationEntryPoint))<br>            <span class="hljs-comment">// 禁用 CSRF</span><br>            <span class="hljs-selector-class">.csrf</span>(ServerHttpSecurity.<span class="hljs-attribute">CsrfSpec</span>::disable);<br>    <span class="hljs-selector-tag">return</span> <span class="hljs-selector-tag">http</span><span class="hljs-selector-class">.build</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;这样一条过滤链便是在认证过滤器之前添加了一个过滤器，用于处理忽略的白名单 URI。<br><br>&emsp;&emsp;对于过滤器来说，看一看其官方的接口：<br></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">init</span><span class="hljs-params">(FilterConfig)</span></span><br><span class="hljs-function"><span class="hljs-title">doFilter</span><span class="hljs-params">(ServletRequest, ServletResponse, FilterChain)</span></span><br><span class="hljs-function"><span class="hljs-title">destroy</span><span class="hljs-params">()</span></span><br><br><span class="hljs-function"><span class="hljs-title">filter</span><span class="hljs-params">(ServerWebExchange exchange, GatewayFilterChain chain)</span></span><br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;可以看到，其核心方法就是 doFilter 或 filter，那么，当需要实现一个过滤器的时候，便可以从 doFilter 或者 filter 方法下手，进行过滤。比如，由此实现一个对于 IP 黑白名单限制的一个过滤。<br></p>
+<h2 id="网关-Nacos-配置中心得-IP-黑白名单限制"><a href="#网关-Nacos-配置中心得-IP-黑白名单限制" class="headerlink" title="网关+Nacos 配置中心得 IP 黑白名单限制"></a>网关+Nacos 配置中心得 IP 黑白名单限制</h2><p>&emsp;&emsp;对于一个 IP 黑白名单限制的过滤器来说，首先需要从 request 对象中获得对应的客户端 IP：<br></p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs abnf">// 获取request对象<br>ServerHttpRequest request <span class="hljs-operator">=</span> exchange.getRequest()<span class="hljs-comment">;</span><br>ServerHttpResponse response <span class="hljs-operator">=</span> exchange.getResponse()<span class="hljs-comment">;</span><br>// 从request对象中获取客户端ip<br>String clientIp <span class="hljs-operator">=</span> request.getRemoteAddress().getHostString()<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;而后便可以根据黑白名单模式及黑白名单的列表进行判断及过滤：<br></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-comment">// 如果在黑名单模式同时IP在黑名单的时候</span><br><span class="hljs-keyword">if</span> (isBlackList &amp;&amp; blackList.contains(clientIp)) &#123;<br>    <span class="hljs-comment">// 拒绝黑名单上IP的访问,返回信息</span><br>    System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;blackList1, clientIp = &quot;</span> + clientIp);<br>    response.setStatusCode(HttpStatus.UNAUTHORIZED); <span class="hljs-comment">// 状态码</span><br>    String <span class="hljs-keyword">data</span> = <span class="hljs-string">&quot;Request be denied! IP in blacklist and mode is blackList now!&quot;</span>;<br>    DataBuffer wrap = response.bufferFactory().wrap(<span class="hljs-keyword">data</span>.getBytes());<br>    <span class="hljs-keyword">return</span> response.writeWith(Mono.just(wrap));<br>&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!isBlackList &amp;&amp; whiteList.contains(clientIp)) &#123;<br>    <span class="hljs-comment">// 如果说是白名单模式并且白名单中有这个IP的时候</span><br>    <span class="hljs-comment">// 可以访问</span><br>    <span class="hljs-comment">// 合法请求，放⾏，执⾏后续的过滤器</span><br>    System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;whiteList1, clientIp = &quot;</span> + clientIp);<br>    <span class="hljs-keyword">return</span> chain.filter(exchange);<br>&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!isBlackList &amp;&amp; !whiteList.contains(clientIp)) &#123;<br>    <span class="hljs-comment">// 最后的情况是白名单模式但是不在白名单中</span><br>    <span class="hljs-comment">// 不可以访问</span><br>    System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;whiteList2, clientIp = &quot;</span> + clientIp);<br>    response.setStatusCode(HttpStatus.UNAUTHORIZED);<br>    String <span class="hljs-keyword">data</span> = <span class="hljs-string">&quot;Request be denied! IP not in whitelist and mode is whiteList now!&quot;</span>;<br>    DataBuffer wrap = response.bufferFactory().wrap(<span class="hljs-keyword">data</span>.getBytes());<br>    <span class="hljs-keyword">return</span> response.writeWith(Mono.just(wrap));<br>&#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-comment">// 剩下的情况,一个是黑名单模式,但是这个IP不在黑名单中</span><br>    System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;blackList2, clientIp = &quot;</span> + clientIp);<br>    <span class="hljs-keyword">return</span> chain.filter(exchange);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;而对于这样一个黑白名单的配置，同样可以采用 nacos 配置中心动态更新的方法：<br></p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-meta">@RefreshScope</span><br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;通过实现一个 loadConfig，载入配置：<br></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">loadConfig</span>() throws NacosException</span> &#123;<br>    <span class="hljs-comment">// 首先是载入配置</span><br>    String blackIpDataId = blackIpList;<br>    String whiteIpDataId = whiteIpList;<br>    String ipDataId = IPDataId;<br>    String <span class="hljs-keyword">group</span> = groupConfig;<br>    String configBlack = nacosConfigManager.getConfigService().getConfig(blackIpDataId, <span class="hljs-keyword">group</span>, <span class="hljs-number">5000</span>);<br>    String configWhite = nacosConfigManager.getConfigService().getConfig(whiteIpDataId, <span class="hljs-keyword">group</span>, <span class="hljs-number">5000</span>);<br>    String configIpManagement = nacosConfigManager.getConfigService().getConfig(ipDataId, <span class="hljs-keyword">group</span>, <span class="hljs-number">5000</span>);<br><br>    <span class="hljs-comment">// 然后判断采用黑名单还是白名单模式</span><br>    <span class="hljs-keyword">if</span> (Objects.<span class="hljs-keyword">equals</span>(configIpManagement, <span class="hljs-string">&quot;true&quot;</span>)) &#123;<br>        System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;采用黑名单模式限制终端IP&quot;</span>);<br>        isBlackList = <span class="hljs-literal">true</span>;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;采用白名单模式限制终端IP&quot;</span>);<br>        isBlackList = <span class="hljs-literal">false</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// 加入nacos中黑名单的IP</span><br>    <span class="hljs-keyword">if</span> (configBlack != <span class="hljs-literal">null</span>) &#123;<br>        System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;now is in blackText&quot;</span>);<br>        System.<span class="hljs-keyword">out</span>.println(configBlack);<br>        String[] ips = configBlack.split(<span class="hljs-string">&quot;,&quot;</span>);<br>        blackList.clear();<br>        <span class="hljs-keyword">for</span> (String ip : ips) &#123;<br>            blackList.<span class="hljs-keyword">add</span>(ip.trim());<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">// 加入nacos中白名单的ip</span><br>    <span class="hljs-keyword">if</span> (configWhite != <span class="hljs-literal">null</span>) &#123;<br>        System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;now is in whiteText&quot;</span>);<br>        System.<span class="hljs-keyword">out</span>.println(configWhite);<br>        String[] ips = configWhite.split(<span class="hljs-string">&quot;,&quot;</span>);<br>        whiteList.clear();<br>        <span class="hljs-keyword">for</span> (String ip : ips) &#123;<br>            whiteList.<span class="hljs-keyword">add</span>(ip.trim());<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;在此基础上加入监听器监听配置文件的变化，在接收到nacos的变更后便重新加载配置，由此实现IP黑白名单的动态限制。<br><br>&emsp;&emsp;详细实现可参见<a target="_blank" rel="noopener" href="https://github.com/gagaducko/springcloud-microservice-security/tree/main/gateway-service">https://github.com/gagaducko/springcloud-microservice-security/tree/main/gateway-service</a><br></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">微服务学习笔记</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" class="print-no-link">#微服务</a>
+      
+        <a href="/tags/%E7%BD%91%E5%85%B3/" class="print-no-link">#网关</a>
+      
+        <a href="/tags/Nacos/" class="print-no-link">#Nacos</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>学习笔记—微服务—技术栈实践(6)—网关过滤器+Nacos的IP黑白名单限制</div>
+      <div>https://gagaducko.github.io/2024/09/13/学习笔记—微服务—技术栈实践-6-—网关-Nacos的IP黑白名单限制/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>gagaduck</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年9月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/09/14/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-7-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%9D%83%E9%99%90%E6%96%B9%E6%A1%88/" title="学习笔记—微服务—技术栈实践(7)-微服务的权限方案">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">学习笔记—微服务—技术栈实践(7)-微服务的权限方案</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/09/12/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-5-%E2%80%94%E7%BD%91%E5%85%B3-Nacos-Sentinel%E7%9A%84%E5%8A%A8%E6%80%81%E6%9C%8D%E5%8A%A1%E5%AE%B9%E9%94%99/" title="学习笔记—微服务—技术栈实践(5)—网关+Nacos+Sentinel的动态服务容错">
+                        <span class="hidden-mobile">学习笔记—微服务—技术栈实践(5)—网关+Nacos+Sentinel的动态服务容错</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/gagaducko" target="_blank" rel="nofollow noopener"><span>嘎嘎鸭</span></a> <i class="iconfont icon-love"></i> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
