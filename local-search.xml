@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>学习笔记—微服务—技术栈实践(9)—日志管理</title>
+    <link href="/2024/09/16/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-9-%E2%80%94%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"/>
+    <url>/2024/09/16/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-9-%E2%80%94%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>学习笔记</category>
+      
+      <category>微服务学习笔记</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>微服务</tag>
+      
+      <tag>日志管理</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>学习笔记—微服务—技术栈实践(8)—链路追踪</title>
     <link href="/2024/09/15/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-8-%E2%80%94%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/"/>
     <url>/2024/09/15/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%BE%AE%E6%9C%8D%E5%8A%A1%E2%80%94%E6%8A%80%E6%9C%AF%E6%A0%88%E5%AE%9E%E8%B7%B5-8-%E2%80%94%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/</url>
@@ -24,7 +53,7 @@
       
       <tag>微服务</tag>
       
-      <tag>链路追钟</tag>
+      <tag>链路追踪</tag>
       
     </tags>
     
