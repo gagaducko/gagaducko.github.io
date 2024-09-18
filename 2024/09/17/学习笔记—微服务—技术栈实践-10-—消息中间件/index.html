@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://gagaducko.github.io/imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%BE%AE%E6%9C%8D%E5%8A%A1_%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/kafka%E6%94%B6%E5%8F%91%E6%B6%88%E6%81%AF.png">
 <meta property="og:image" content="https://gagaducko.github.io/imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%BE%AE%E6%9C%8D%E5%8A%A1_%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/rocketmq%E6%94%B6%E5%8F%91%E6%B6%88%E6%81%AF.png">
 <meta property="article:published_time" content="2024-09-17T11:20:14.000Z">
-<meta property="article:modified_time" content="2024-09-17T13:01:11.841Z">
+<meta property="article:modified_time" content="2024-09-18T15:53:18.007Z">
 <meta property="article:author" content="gagaduck">
 <meta property="article:tag" content="微服务">
 <meta property="article:tag" content="消息中间件">
@@ -227,7 +227,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3k 字
+          3.3k 字
         
       </span>
     
@@ -238,7 +238,7 @@
         
         
         
-          26 分钟
+          28 分钟
         
       </span>
     
@@ -369,6 +369,8 @@
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">docker <span class="hljs-built_in">run</span> -d --name kafka --network kafka -e <span class="hljs-attribute">KAFKA_BROKER_ID</span>=1 -e <span class="hljs-attribute">KAFKA_ZOOKEEPER_CONNECT</span>=zookeeper:2181 -e <span class="hljs-attribute">ALLOW_PLAINTEXT_LISTENER</span>=<span class="hljs-literal">yes</span> -e <span class="hljs-attribute">KAFKA_ADVERTISED_LISTENERS</span>=PLAINTEXT://localhost:9092 -p 9092:9092 bitnami/kafka:3.6.1<br></code></pre></td></tr></table></figure>
 <p>&emsp;&emsp;检查安装情况的方式可以参考上文提到的链接:<br></p>
 <figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">docker logs zookeeper<br>docker logs kafka<br><span class="hljs-comment"># 采用kafka命令行进行检查</span><br>docker exec -it kafka <span class="hljs-string">/bin/bash</span><br><span class="hljs-comment"># 列出 Kafka 主题</span><br>kafka-topics.sh <span class="hljs-params">--list</span> <span class="hljs-params">--bootstrap-server</span> kafka<span class="hljs-function">:9092</span><br><span class="hljs-comment"># 创建一个名为 test-topic 的主题</span><br>kafka-topics.sh <span class="hljs-params">--create</span> <span class="hljs-params">--topic</span> test-topic <span class="hljs-params">--partitions</span> 1 <span class="hljs-params">--replication-factor</span> 1 <span class="hljs-params">--bootstrap-server</span> kafka<span class="hljs-function">:9092</span><br><span class="hljs-comment"># 列出所有主题，确认 test-topic 是否存在</span><br>kafka-topics.sh <span class="hljs-params">--list</span> <span class="hljs-params">--bootstrap-server</span> kafka<span class="hljs-function">:9092</span><br><span class="hljs-comment"># 删除 test-topic 主题</span><br>kafka-topics.sh <span class="hljs-params">--delete</span> <span class="hljs-params">--topic</span> test-topic <span class="hljs-params">--bootstrap-server</span> kafka<span class="hljs-function">:9092</span><br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;另外，还有个需要注意的东西，就是<strong>kafka的外部访问</strong><br><br>&emsp;&emsp;比如kafka部署在192.168.1.1上，那么对于192.168.1.2上的服务，很容易发现会有问题，无法正常使用kafka。<br><br>&emsp;&emsp;要让kafka进行外网访问，需要修改kafka的配置文件server.properties。以docker部署kafka+zookeeper为例子：<br></p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs axapta"><span class="hljs-meta"># 进入kafka的容器，将配置文件拷贝出来</span><br>docker cp kafka:/opt/bitnami/kafka/config/<span class="hljs-keyword">server</span>.properties <span class="hljs-keyword">server</span>.properties<br><span class="hljs-meta"># 修改配置文件</span><br>vim <span class="hljs-keyword">server</span>.properties<br><span class="hljs-meta"># 修改如下内容</span><br><span class="hljs-meta"># 这样Kafka就会在所有网络接口上监听9092端口</span><br>listeners=PLAINTEXT:<span class="hljs-comment">//0.0.0.0:9092</span><br><span class="hljs-meta"># 修改Kafka的advertised.listeners，将localhost改为宿主机的公共IP地址，这样Kafka就会将消息发送到宿主机的IP地址</span><br>advertised.listeners=PLAINTEXT:<span class="hljs-comment">//宿主机IP:9092</span><br><span class="hljs-meta"># 将修改后的配置文件拷贝回去</span><br>docker cp <span class="hljs-keyword">server</span>.properties kafka:/opt/bitnami/kafka/config/<span class="hljs-keyword">server</span>.properties<br><span class="hljs-meta"># 或者直接映射文件也可以</span><br><span class="hljs-meta"># 最后重启kafka让配置文件失效</span><br>docker restart kafka<br></code></pre></td></tr></table></figure>
 
 <h4 id="kafka的使用"><a href="#kafka的使用" class="headerlink" title="kafka的使用"></a>kafka的使用</h4><p>&emsp;&emsp;在安装好kafka的基础上，于此介绍一下基于springboot对kafka的使用。<br><br>&emsp;&emsp;首先，依旧是先配置好合适的依赖：<br></p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.kafka<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-kafka<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
