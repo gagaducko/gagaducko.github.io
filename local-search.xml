@@ -8,7 +8,7 @@
     <link href="/2024/09/25/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E2%80%94MySQL%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%A4%87%E4%BB%BD/"/>
     <url>/2024/09/25/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E2%80%94MySQL%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%A4%87%E4%BB%BD/</url>
     
-    <content type="html"><![CDATA[]]></content>
+    <content type="html"><![CDATA[<h2 id="MySQL主从备份"><a href="#MySQL主从备份" class="headerlink" title="MySQL主从备份"></a>MySQL主从备份</h2><p>&emsp;&emsp;服务器有可能突然挂机，如果是docker部署MySQL则也有可能容器突然坏了，这样对于数据库的使用自然会造成不少的影响，因此，需要对数据库采用一个高可用架构。<br><br>&emsp;&emsp;一个比较常见的场景就是主从备份，通常来说都是一主一从或者一主多从。主机进行工作，从机备份数据，如果主机突然宕机了，从机可以立刻开始工作而不会导致数据丢失。<br></p><h2 id="主从备份原理"><a href="#主从备份原理" class="headerlink" title="主从备份原理"></a>主从备份原理</h2><p>&emsp;&emsp;<strong>replication</strong>，可以实现将数据从⼀台数据库服务器（mster）<strong>复制</strong>到多台数据库服务器slave上。并且，replication属于<strong>异步复制</strong>，因此是无需长连接的。<br><br>&emsp;&emsp;从工作上来说，复制是基于源服务器在其二进制日志中跟踪对其数据库的所有更改(更新、删除等)。<br><br>&emsp;&emsp;二进制日志作为从服务器启动开始修改数据库结构或内容(数据)的所有事件的书面记录。不过，二进制日志binlog通常不记录SELECT语句，因为它们既不修改数据库结构，也不修改内容。<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br></p><h2 id="主从备份实践"><a href="#主从备份实践" class="headerlink" title="主从备份实践"></a>主从备份实践</h2><p>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br></p>]]></content>
     
     
     <categories>
