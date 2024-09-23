@@ -1,0 +1,687 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/imgs/icon.ico">
+  <link rel="icon" href="/imgs/icon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="gagaduck">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="学习笔记——性能测试——分布式Jmeter的搭建与使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记—性能测试—分布式Jmeter搭建与使用">
+<meta property="og:url" content="https://gagaducko.github.io/2024/09/23/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E2%80%94%E5%88%86%E5%B8%83%E5%BC%8FJmeter%E6%90%AD%E5%BB%BA%E4%B8%8E%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="gagaduck">
+<meta property="og:description" content="学习笔记——性能测试——分布式Jmeter的搭建与使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gagaducko.github.io/imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95_jmeter/jmeter%E7%95%8C%E9%9D%A2.png">
+<meta property="og:image" content="https://gagaducko.github.io/imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95_jmeter/jmeter%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95.png">
+<meta property="og:image" content="https://gagaducko.github.io/imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95_jmeter/%E6%8A%A5%E5%91%8A%E5%AD%98%E6%94%BE.png">
+<meta property="og:image" content="https://gagaducko.github.io/imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95_jmeter/%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A.png">
+<meta property="article:published_time" content="2024-09-23T03:34:41.000Z">
+<meta property="article:modified_time" content="2024-09-23T06:33:16.105Z">
+<meta property="article:author" content="gagaduck">
+<meta property="article:tag" content="性能测试">
+<meta property="article:tag" content="Jmeter">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://gagaducko.github.io/imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95_jmeter/jmeter%E7%95%8C%E9%9D%A2.png">
+  
+  
+  
+  <title>学习笔记—性能测试—分布式Jmeter搭建与使用 - gagaduck</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"gagaducko.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>嘎嘎鸭</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="学习笔记—性能测试—分布式Jmeter搭建与使用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-09-23 11:34" pubdate>
+          2024年9月23日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          12 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">学习笔记—性能测试—分布式Jmeter搭建与使用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Jmeter"><a href="#Jmeter" class="headerlink" title="Jmeter"></a>Jmeter</h2><p>&emsp;&emsp;总所周知，Jmeter是可以用于接口测试和性能测试的一个工具。随着现在技术的发展，对性能测试的要求是日益提升的，因此，Jmeter的性能测试是极为重要的。<br><br>&emsp;&emsp;然后，Jmeter是基于Java开发的，每创建一个线程或者说一个虚拟用户的时候，JVM就会默认为每个线程分配1M的堆栈内存空间，由于配置限制，Jmeter在一个单机的情况下，是很难实现过高的并发的。<br><br>&emsp;&emsp;因此，可以通过Jmeter的分布式部署，来整合多台主机的硬件资源，以此达到对被测接口进行压力测试的目的。<br><br>&emsp;&emsp;在分布式的Jmeter测试环境中，有两个非常重要的角色，分别为master和slaves。<br><br>&emsp;&emsp;<strong>master</strong>：也可以叫做主节点，主要就是负责发送测试脚本到slaves节点上，并且，在master上可以启动、停止、监控测试。最后，slaves通过将测试结果返回到master并由master进行汇总分析。<br><br>&emsp;&emsp;<strong>slaves</strong>：也可以叫做是从节点，主要负责从master节点来接收测试脚本，并执行压测，最后返回测试结果给master节点。<br><br>&emsp;&emsp;通过Jmeter的分布式部署使用，可以达到较高的可扩展性、并能高效利用多台机器的资源进行压力测试，且更接近于实际上的高并发场景，评估会更加全面。<br><br>&emsp;&emsp;当然，采用Jmeter的<strong>坏处</strong>就是对环境的一致性要求比较高，且网络因素可能会造成一定的影响。因此，在具体的部署使用过程中，要注意：带宽要够，主从节点的时间要同步，防火墙要确保不会阻拦。<br></p>
+<h2 id="单机Jmeter搭建"><a href="#单机Jmeter搭建" class="headerlink" title="单机Jmeter搭建"></a>单机Jmeter搭建</h2><p>&emsp;&emsp;首先，对于一个单机的普通的Jmeter搭建来说，可以直接访问<a target="_blank" rel="noopener" href="https://jmeter.apache.org/download_jmeter.cgi">https://jmeter.apache.org/download_jmeter.cgi</a><br><br>&emsp;&emsp;并下载适合版本的包（主要需要安装的机器上有Java的），例如，于此选择apache-jmeter-5.6.3.zip<br><br>&emsp;&emsp;下载后，将其解压到本地没有空格和中文路径的文件夹中，注意不要出现两层同名文件夹。<br><br>&emsp;&emsp;将bin目录配置进入环境变量：<br></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">D</span>:\learning_demo\jmeter\apache-jmeter-<span class="hljs-number">5</span>.<span class="hljs-number">6</span>.<span class="hljs-number">3</span>\bin<br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;可以通过如下命令查看：<br></p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">jmeter -v</span><br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;命令行输入Jmeter，出现以下内容：<br><br><img src="/../imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95_jmeter/jmeter%E7%95%8C%E9%9D%A2.png" srcset="/img/loading.gif" lazyload alt="单机版Jmeter" title="单机版Jmeter"></p>
+<h2 id="基于Docker的分布式Jmeter搭建及测试"><a href="#基于Docker的分布式Jmeter搭建及测试" class="headerlink" title="基于Docker的分布式Jmeter搭建及测试"></a>基于Docker的分布式Jmeter搭建及测试</h2><p>&emsp;&emsp;这里采用Docker作为分布式Jmeter搭建的工具。<br><br>&emsp;&emsp;首先，需要pull对应的master和slave镜像，镜像的选择比较多样，这里采用：<br></p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">docker pull runcare/jmeter-<span class="hljs-keyword">master</span><br><span class="hljs-title">docker</span> pull runcare/jmeter-<span class="hljs-literal">slave</span><br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;接着创建docker虚拟网络，来保证网络隔离和容器间的通信。<br><br>&emsp;&emsp;这里创建一个jmeter的网络：<br></p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs routeros">docker<span class="hljs-built_in"> network </span>create jmeter<br><br><span class="hljs-comment"># 可以查看列表</span><br>docker<span class="hljs-built_in"> network </span>ls<br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;而后，以三个容器作为Jmeter的slave节点创建从服务：<br></p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs applescript">docker <span class="hljs-built_in">run</span> -<span class="hljs-keyword">it</span> -d <span class="hljs-comment">--name slave_01 --network jmeter runcare/jmeter-slave</span><br>docker <span class="hljs-built_in">run</span> -<span class="hljs-keyword">it</span> -d <span class="hljs-comment">--name slave_02 --network jmeter runcare/jmeter-slave</span><br>docker <span class="hljs-built_in">run</span> -<span class="hljs-keyword">it</span> -d <span class="hljs-comment">--name slave_03 --network jmeter runcare/jmeter-slave</span><br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;接着通过logs查看每个slaves的ip地址：<br></p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc">docker logs slave<span class="hljs-emphasis">_01</span><br><span class="hljs-emphasis">docker logs slave_02</span><br><span class="hljs-emphasis">docker logs slave_</span>03<br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;此处显示如下：<br></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment">###### slave_01 ######</span><br><span class="hljs-attribute">Sep</span> <span class="hljs-number">23</span>, <span class="hljs-number">2024</span> <span class="hljs-number">1</span>:<span class="hljs-number">29</span>:<span class="hljs-number">12</span> PM java.util.prefs.FileSystemPreferences$<span class="hljs-number">1</span> run<br><span class="hljs-attribute">INFO</span>: Created user preferences directory.<br><span class="hljs-attribute">Using</span> local port: <span class="hljs-number">60001</span><br><span class="hljs-attribute">Created</span> remote object: UnicastServerRef2<span class="hljs-meta"> [liveRef: [endpoint:[172.23.0.2:60001](local),objID:[-15e5ed54:1921d5af285:-7fff, -1734960256902179902]]]</span><br><span class="hljs-attribute">Httpd</span> started <span class="hljs-literal">on</span> port: <span class="hljs-number">9000</span><br><span class="hljs-attribute">Sessiond</span> started <span class="hljs-literal">on</span> port: <span class="hljs-number">9001</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment">###### slave_02 ######</span><br><span class="hljs-attribute">Sep</span> <span class="hljs-number">23</span>, <span class="hljs-number">2024</span> <span class="hljs-number">1</span>:<span class="hljs-number">29</span>:<span class="hljs-number">30</span> PM java.util.prefs.FileSystemPreferences$<span class="hljs-number">1</span> run<br><span class="hljs-attribute">INFO</span>: Created user preferences directory.<br><span class="hljs-attribute">Using</span> local port: <span class="hljs-number">60001</span><br><span class="hljs-attribute">Created</span> remote object: UnicastServerRef2<span class="hljs-meta"> [liveRef: [endpoint:[172.23.0.3:60001](local),objID:[-29c83ff3:1921d5b38b0:-7fff, -7241895482354295030]]]</span><br><span class="hljs-attribute">Httpd</span> started <span class="hljs-literal">on</span> port: <span class="hljs-number">9000</span><br><span class="hljs-attribute">Sessiond</span> started <span class="hljs-literal">on</span> port: <span class="hljs-number">9001</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment">###### slave_03 ######</span><br><span class="hljs-attribute">Sep</span> <span class="hljs-number">23</span>, <span class="hljs-number">2024</span> <span class="hljs-number">1</span>:<span class="hljs-number">29</span>:<span class="hljs-number">34</span> PM java.util.prefs.FileSystemPreferences$<span class="hljs-number">1</span> run<br><span class="hljs-attribute">INFO</span>: Created user preferences directory.<br><span class="hljs-attribute">Using</span> local port: <span class="hljs-number">60001</span><br><span class="hljs-attribute">Created</span> remote object: UnicastServerRef2<span class="hljs-meta"> [liveRef: [endpoint:[172.23.0.4:60001](local),objID:[-3fd9085:1921d5b4783:-7fff, -3735717183614470538]]]</span><br><span class="hljs-attribute">Httpd</span> started <span class="hljs-literal">on</span> port: <span class="hljs-number">9000</span><br><span class="hljs-attribute">Sessiond</span> started <span class="hljs-literal">on</span> port: <span class="hljs-number">9001</span><br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;可以看到三个容器的地址分别为：<br></p>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs accesslog"><span class="hljs-number">172.23.0.2</span><br><span class="hljs-number">172.23.0.3</span><br><span class="hljs-number">172.23.0.4</span><br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;在此基础上，先创建一个测试脚本（可通过本地的jmeter进行创建），创建gagaduck.jmx一个简单的测试脚本，并放在~&#x2F;jmx_file_dir下面。启动master节点执行测试：<br></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">result=`<span class="hljs-built_in">date</span> +<span class="hljs-string">&quot;%Y%m%d%H%M%S&quot;</span>` &amp;&amp; docker run --<span class="hljs-built_in">rm</span> --network jmeter_net -v /root/jmx_file_dir:/data runcare/jmeter-master jmeter -n -t /data/gagaduck.jmx -l /data/<span class="hljs-variable">$result</span>.jtl -j /data/<span class="hljs-variable">$result</span>.<span class="hljs-built_in">log</span> -e -o /data/<span class="hljs-variable">$result</span> -R 172.23.0.2,172.23.0.3,172.23.0.4<br></code></pre></td></tr></table></figure>
+<p><img src="/../imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95_jmeter/jmeter%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95.png" srcset="/img/loading.gif" lazyload alt="jmeter压力测试" title="jmeter压力测试"><br>&emsp;&emsp;同时，于此，可以查看slave的日志：<br></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Starting</span> the test <span class="hljs-literal">on</span> host <span class="hljs-number">172.23.0.4</span> @ Mon Sep <span class="hljs-number">23</span> <span class="hljs-number">14</span>:<span class="hljs-number">16</span>:<span class="hljs-number">26</span> CST <span class="hljs-number">2024</span> (<span class="hljs-number">1727072186051</span>)<br><span class="hljs-attribute">Finished</span> the test <span class="hljs-literal">on</span> host <span class="hljs-number">172.23.0.4</span> @ Mon Sep <span class="hljs-number">23</span> <span class="hljs-number">14</span>:<span class="hljs-number">16</span>:<span class="hljs-number">35</span> CST <span class="hljs-number">2024</span> (<span class="hljs-number">1727072195655</span>)<br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;每一个slave都有执行test的日志输出。<br><br>&emsp;&emsp;对于这样一条命令，首先<strong>result&#x3D;date +”%Y%m%d%H%M%S”<strong>这个是获取当前的日期时间并许以特定的格式。<br><br>&emsp;&emsp;<strong>docker run –rm</strong>表示运行一个 Docker 容器，–rm 表示容器在执行结束后自动删除。<br><br>&emsp;&emsp;</strong>-v &#x2F;root&#x2F;jmx_file_dir:&#x2F;data</strong>是进行卷挂载，将本地的 &#x2F;root&#x2F;jmx_file_dir 目录映射到容器内的 &#x2F;data 目录，由此进行测试。<br><br>&emsp;&emsp;<strong>jmeter -n -t &#x2F;data&#x2F;gagaduck.jmx -l &#x2F;data&#x2F;$result.jtl -j &#x2F;data&#x2F;$result.log -e -o &#x2F;data&#x2F;$result -R 172.23.0.2,172.23.0.3,172.23.0.4</strong>这样的一个部分呢，适用于容器内的具体操作。这里使用 jmeter 工具进行相关测试，指定了测试计划文件、结果文件、日志文件等，并指定了要报告到的 IP 地址（Slaves节点的IP地址）。<br><br>&emsp;&emsp;在该命令启动后，master首先会将本地的jmx文件拷贝并分发到指定jmeter网络的所有slave节点上。<br><br>&emsp;&emsp;拿到了测试脚本之后，slave就会以命令行的模式执行脚本。执行过程中，slave会将执行获得的数据结果传回到master节点上，由master节点来汇总。也就是上面图片所展示的内容。<br><br>&emsp;&emsp;最后，回到挂在的目录下面，会有一个文件夹，这个文件夹以当前时间为名字进行命名。<br><br><img src="/../imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95_jmeter/%E6%8A%A5%E5%91%8A%E5%AD%98%E6%94%BE.png" srcset="/img/loading.gif" lazyload alt="报告路径" title="报告路径"><br>&emsp;&emsp;进去后，打开index.html，便是当前这个测试的测试报告了。<br><br><img src="/../imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95_jmeter/%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A.png" srcset="/img/loading.gif" lazyload alt="测试报告" title="测试报告"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" class="print-no-link">#性能测试</a>
+      
+        <a href="/tags/Jmeter/" class="print-no-link">#Jmeter</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>学习笔记—性能测试—分布式Jmeter搭建与使用</div>
+      <div>https://gagaducko.github.io/2024/09/23/学习笔记—性能测试—分布式Jmeter搭建与使用/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>gagaduck</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年9月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/09/23/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98-4-%E2%80%94Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="学习笔记—分布式缓存(4)—Redis分布式锁">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">学习笔记—分布式缓存(4)—Redis分布式锁</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/09/22/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86%E2%80%94minio/" title="学习笔记—文件管理—minio">
+                        <span class="hidden-mobile">学习笔记—文件管理—minio</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/gagaducko" target="_blank" rel="nofollow noopener"><span>嘎嘎鸭</span></a> <i class="iconfont icon-love"></i> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
