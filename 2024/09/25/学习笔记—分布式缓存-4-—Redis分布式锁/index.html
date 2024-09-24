@@ -19,23 +19,23 @@
   <meta name="author" content="gagaduck">
   <meta name="keywords" content="">
   
-    <meta name="description" content="学习笔记——通过nginx实现负载均衡">
+    <meta name="description" content="学习笔记—分布式缓存(4)—Redis分布式锁">
 <meta property="og:type" content="article">
-<meta property="og:title" content="学习笔记—负载均衡(1)—nginx">
-<meta property="og:url" content="https://gagaducko.github.io/2024/09/24/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-1-%E2%80%94nginx%E7%9A%84%E5%9F%BA%E7%A1%80%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/index.html">
+<meta property="og:title" content="学习笔记—分布式缓存(4)—Redis分布式锁">
+<meta property="og:url" content="https://gagaducko.github.io/2024/09/25/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98-4-%E2%80%94Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/index.html">
 <meta property="og:site_name" content="gagaduck">
-<meta property="og:description" content="学习笔记——通过nginx实现负载均衡">
+<meta property="og:description" content="学习笔记—分布式缓存(4)—Redis分布式锁">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-09-24T10:08:37.000Z">
-<meta property="article:modified_time" content="2024-09-19T12:16:51.562Z">
+<meta property="article:published_time" content="2024-09-25T14:18:03.000Z">
+<meta property="article:modified_time" content="2024-09-24T03:24:29.722Z">
 <meta property="article:author" content="gagaduck">
-<meta property="article:tag" content="负载均衡">
-<meta property="article:tag" content="nginx">
+<meta property="article:tag" content="分布式缓存">
+<meta property="article:tag" content="redis">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>学习笔记—负载均衡(1)—nginx - gagaduck</title>
+  <title>学习笔记—分布式缓存(4)—Redis分布式锁 - gagaduck</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -201,7 +201,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="学习笔记—负载均衡(1)—nginx"></span>
+            <span id="subtitle" data-typed-text="学习笔记—分布式缓存(4)—Redis分布式锁"></span>
           
         </div>
 
@@ -212,8 +212,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-09-24 18:08" pubdate>
-          2024年9月24日 晚上
+        <time datetime="2024-09-25 22:18" pubdate>
+          2024年9月25日 晚上
         </time>
       </span>
     
@@ -224,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          1.3k 字
         
       </span>
     
@@ -235,7 +235,7 @@
         
         
         
-          1 分钟
+          12 分钟
         
       </span>
     
@@ -272,12 +272,36 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">学习笔记—负载均衡(1)—nginx</h1>
+            <h1 id="seo-header">学习笔记—分布式缓存(4)—Redis分布式锁</h1>
             
             
               <div class="markdown-body">
                 
-                
+                <h2 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h2><p>&emsp;&emsp;在单体的应用开发场景中，在多线程的环境下，涉及到并发同步的时候，对于可能出现的资源抢占问题，为了保证一个代码块在同一时间内只有一个线程可以访问，一般可以采用本地锁比如synchronized来进行保证。<br><br>&emsp;&emsp;但是，在分布式集群工作的开发场景中，本地锁便不起作用了。就需要引入分布式锁。<br><br>&emsp;&emsp;Redis 分布式锁是一种基于 Redis 实现的分布式系统中常用的锁机制，用于协调多个进程或线程对共享资源的访问。分布式锁可以保证在分布式环境中不同的服务实例之间同步地对某些资源进行排他访问，避免资源的竞争和不一致问题。<br></p>
+<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><p>&emsp;&emsp;Redis 分布式锁基于 Redis 的 SETNX（Set if Not Exists）命令实现，它的基本思路是：<br><br>&emsp;&emsp;<strong>获取锁</strong>：使用 SETNX（SET if Not eXists）命令尝试在 Redis 中设置一个唯一标识符（锁键），如果锁不存在则设置成功，并返回 1，代表获取锁成功。如果锁已存在（意味着其他进程已经持有该锁），SETNX 命令将返回 0，代表获取锁失败。<br><br>&emsp;&emsp;<strong>设置过期时间</strong>：为防止锁无法释放（如进程崩溃或网络中断导致锁被长期占用），应为锁设置一个过期时间，避免死锁。可以通过 Redis 的 EXPIRE 命令或使用 SET 命令的扩展参数 EX PX NX，一次性设置锁并指定过期时间。<br><br>&emsp;&emsp;<strong>释放锁</strong>：锁的持有者完成任务后，使用 DEL 命令删除锁键，释放锁，使得其他进程有机会获取锁。为防止误删锁（如 A 获取锁后，B 锁超时，A 恰好完成任务后删除了锁，导致 B 错误删除锁），一般通过比较锁的唯一标识（如 UUID）来确保只有持有锁的进程才能释放锁。<br></p>
+<h2 id="Redisson"><a href="#Redisson" class="headerlink" title="Redisson"></a>Redisson</h2><p>&emsp;&emsp;Redisson 是一个 Java 客户端，用于与 Redis 服务器进行交互。它提供了多种高级功能，简化了 Redis 的使用，支持多种数据结构和异步操作。它使用 Redis 的底层命令，通过其高效的连接管理和线程池来优化性能。它的设计使得各种数据结构可以通过简单的 Java 对象进行操作，同时支持异步和响应式编程模型。<br><br>&emsp;&emsp;在功能上来说，Redisson提供简单的锁机制，确保多线程环境下的数据一致性。<br></p>
+<h2 id="RedLock"><a href="#RedLock" class="headerlink" title="RedLock"></a>RedLock</h2><p>&emsp;&emsp;RedLock 是一种分布式锁算法，由 Redis 创始人发明。它解决了在分布式环境中实现可靠锁的难题，确保锁的有效性和一致性。<br><br>&emsp;&emsp;RedLock 的实现基于以下原则：<br></p>
+<ul>
+<li>在多个 Redis 实例中请求锁。</li>
+<li>通过设置锁的有效时间，确保锁不会无限期持有。</li>
+<li>若一个节点获得锁，其他节点会被告知锁的状态。</li>
+<li>通过保证锁的获取顺序，确保只有一个节点可以成功获得锁。</li>
+</ul>
+<p>&emsp;&emsp;具体步骤上来说：<br></p>
+<ul>
+<li>在 N 个 Redis 实例中依次请求锁。</li>
+<li>在大多数实例中成功获得锁后，认为获得锁。</li>
+<li>定期检查锁的状态，并在必要时释放锁。</li>
+</ul>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>&emsp;&emsp;对于Redis分布式锁的实现，有多种方式：<br></p>
+<h3 id="1-SETNX-EXPIRE"><a href="#1-SETNX-EXPIRE" class="headerlink" title="1. SETNX + EXPIRE"></a>1. SETNX + EXPIRE</h3><p>&emsp;&emsp;通过<code>SETNX</code>命令尝试设置一个键，如果成功则表示获得了锁。随后使用<code>EXPIRE</code>命令为该键设置一个过期时间，以防止锁长时间占用。<br></p>
+<h3 id="2-SETNX-value值（系统时间-过期时间）"><a href="#2-SETNX-value值（系统时间-过期时间）" class="headerlink" title="2. SETNX + value值（系统时间 + 过期时间）"></a>2. SETNX + value值（系统时间 + 过期时间）</h3><p>&emsp;&emsp;在<code>SETNX</code>成功时，除了设置锁键，还可以将当前时间戳加上过期时间的值作为锁的值，这样可以在后续解锁时判断锁是否过期。<br></p>
+<h3 id="3-SET的扩展命令（SET-EX-PX-NX）"><a href="#3-SET的扩展命令（SET-EX-PX-NX）" class="headerlink" title="3. SET的扩展命令（SET EX PX NX）"></a>3. SET的扩展命令（SET EX PX NX）</h3><p>&emsp;&emsp;Redis提供了扩展的<code>SET</code>命令，支持在设置键值时同时指定过期时间。使用<code>SET key value EX seconds NX</code>可以一次性完成设置值和过期时间。<br></p>
+<h3 id="4-Lua脚本（包含SETNX-EXPIRE两条命令）"><a href="#4-Lua脚本（包含SETNX-EXPIRE两条命令）" class="headerlink" title="4. Lua脚本（包含SETNX + EXPIRE两条命令）"></a>4. Lua脚本（包含SETNX + EXPIRE两条命令）</h3><p>&emsp;&emsp;利用Lua脚本可以原子性地执行多条命令，避免了在并发情况下的锁竞争。可以在脚本中先执行<code>SETNX</code>，成功后立即调用<code>EXPIRE</code>设置过期时间。<br></p>
+<h3 id="5-SET-EX-PX-NX-校验唯一随机值，再删除"><a href="#5-SET-EX-PX-NX-校验唯一随机值，再删除" class="headerlink" title="5. SET EX PX NX + 校验唯一随机值，再删除"></a>5. SET EX PX NX + 校验唯一随机值，再删除</h3><p>&emsp;&emsp;在获取锁时，使用一个唯一的随机值作为锁的标识。在解锁时先校验这个值是否与当前值相同，只有匹配时才删除锁，确保不会误删其他客户端的锁。<br></p>
+<h3 id="6-Redisson框架"><a href="#6-Redisson框架" class="headerlink" title="6. Redisson框架"></a>6. Redisson框架</h3><p>&emsp;&emsp;Redisson是一个基于Redis的Java客户端，提供了简单易用的分布式锁实现，封装了底层的复杂逻辑，开发者可以方便地使用其提供的API来获取和释放锁。<br></p>
+<h3 id="7-多机实现的分布式锁-Redlock-Redisson"><a href="#7-多机实现的分布式锁-Redlock-Redisson" class="headerlink" title="7. 多机实现的分布式锁 Redlock + Redisson"></a>7. 多机实现的分布式锁 Redlock + Redisson</h3><p>&emsp;&emsp;Redlock是一种在多个Redis实例上实现分布式锁的算法，适合在分布式环境中使用。通过Redisson，可以轻松实现Redlock算法，从而获得高可用的分布式锁。<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br></p>
+
                 
               </div>
             
@@ -300,7 +324,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="category-chain-item">负载均衡</a>
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" class="category-chain-item">分布式缓存</a>
   
   
 
@@ -317,9 +341,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="print-no-link">#负载均衡</a>
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" class="print-no-link">#分布式缓存</a>
       
-        <a href="/tags/nginx/" class="print-no-link">#nginx</a>
+        <a href="/tags/redis/" class="print-no-link">#redis</a>
       
     </div>
   
@@ -331,8 +355,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>学习笔记—负载均衡(1)—nginx</div>
-      <div>https://gagaducko.github.io/2024/09/24/学习笔记—负载均衡-1-—nginx的基础负载均衡/</div>
+      <div>学习笔记—分布式缓存(4)—Redis分布式锁</div>
+      <div>https://gagaducko.github.io/2024/09/25/学习笔记—分布式缓存-4-—Redis分布式锁/</div>
     </div>
     <div class="license-meta">
       
@@ -344,7 +368,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年9月24日</div>
+          <div>2024年9月25日</div>
         </div>
       
       
@@ -376,9 +400,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/09/25/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E2%80%94MySQL%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%A4%87%E4%BB%BD/" title="学习笔记—数据库—MySQL的主从备份">
+                      <a href="/2024/09/26/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-1-%E2%80%94nginx%E7%9A%84%E5%9F%BA%E7%A1%80%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="学习笔记—负载均衡(1)—nginx">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">学习笔记—数据库—MySQL的主从备份</span>
+                        <span class="hidden-mobile">学习笔记—负载均衡(1)—nginx</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -386,8 +410,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/09/23/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98-4-%E2%80%94Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="学习笔记—分布式缓存(4)—Redis分布式锁">
-                        <span class="hidden-mobile">学习笔记—分布式缓存(4)—Redis分布式锁</span>
+                      <a href="/2024/09/24/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E2%80%94%E5%88%86%E5%B8%83%E5%BC%8FJmeter%E6%90%AD%E5%BB%BA%E4%B8%8E%E4%BD%BF%E7%94%A8/" title="学习笔记—性能测试—分布式Jmeter搭建与使用">
+                        <span class="hidden-mobile">学习笔记—性能测试—分布式Jmeter搭建与使用</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
