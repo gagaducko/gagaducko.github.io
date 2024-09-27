@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>学习笔记——nginx(2)——nginx进阶</title>
+      <link href="/2024/09/29/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94nginx-2-%E2%80%94%E2%80%94nginx%E8%BF%9B%E9%98%B6/"/>
+      <url>/2024/09/29/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94nginx-2-%E2%80%94%E2%80%94nginx%E8%BF%9B%E9%98%B6/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习笔记 </category>
+          
+          <category> Nginx </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Nginx </tag>
+            
+            <tag> 进阶知识 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>学习笔记—数据库—MySQL的主从备份</title>
       <link href="/2024/09/27/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E2%80%94MySQL%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%A4%87%E4%BB%BD/"/>
       <url>/2024/09/27/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E2%80%94MySQL%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%A4%87%E4%BB%BD/</url>
@@ -33,9 +62,9 @@
     
     
     <entry>
-      <title>学习笔记—负载均衡(1)—nginx</title>
-      <link href="/2024/09/26/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-1-%E2%80%94nginx%E7%9A%84%E5%9F%BA%E7%A1%80%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
-      <url>/2024/09/26/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-1-%E2%80%94nginx%E7%9A%84%E5%9F%BA%E7%A1%80%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</url>
+      <title>学习笔记——nginx(1)——nginx基础</title>
+      <link href="/2024/09/26/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94nginx(1)%E2%80%94%E2%80%94nginx%E5%9F%BA%E7%A1%80/"/>
+      <url>/2024/09/26/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94nginx(1)%E2%80%94%E2%80%94nginx%E5%9F%BA%E7%A1%80/</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -44,16 +73,16 @@
           
           <category> 学习笔记 </category>
           
-          <category> 负载均衡 </category>
+          <category> Nginx </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 负载均衡 </tag>
+            <tag> Nginx </tag>
             
-            <tag> nginx </tag>
+            <tag> 基础知识 </tag>
             
         </tags>
       
