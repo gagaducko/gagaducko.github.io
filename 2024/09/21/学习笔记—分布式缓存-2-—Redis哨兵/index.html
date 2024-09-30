@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://gagaducko.github.io/imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98_%E4%B8%BB%E4%BB%8E%E5%A4%87%E4%BB%BD/redis%E4%B8%80%E4%B8%BB%E4%BA%8C%E4%BB%8E%E9%9B%86%E7%BE%A4.png">
 <meta property="article:published_time" content="2024-09-21T09:07:05.000Z">
-<meta property="article:modified_time" content="2024-09-19T14:34:10.475Z">
+<meta property="article:modified_time" content="2024-09-29T03:16:35.998Z">
 <meta property="article:author" content="gagaduck">
 <meta property="article:tag" content="分布式缓存">
 <meta property="article:tag" content="redis">
@@ -226,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1k 字
+          1.1k 字
         
       </span>
     
@@ -237,7 +237,7 @@
         
         
         
-          9 分钟
+          10 分钟
         
       </span>
     
@@ -284,7 +284,11 @@
 <h2 id="哨兵的监控原理"><a href="#哨兵的监控原理" class="headerlink" title="哨兵的监控原理"></a>哨兵的监控原理</h2><p>&emsp;&emsp;监控是基于心跳机制来实现的。<br><br>&emsp;&emsp;哨兵Sentinel会每隔1s向集群中的每个实例发送一次ping命令。如果说Sentinel节点发现这个实例未有在规定的时间内响应，那么这个实例就会被认为是主观下线的。<br><br>&emsp;&emsp;如果，超过了一定数量的sentinel都认为这个实例主观下线了，那么这个实例就是客观下线了，这个“数量（quorum）”最好需要超过Sentinel实例数量的一半。<br></p>
 <h2 id="哨兵的故障恢复原理"><a href="#哨兵的故障恢复原理" class="headerlink" title="哨兵的故障恢复原理"></a>哨兵的故障恢复原理</h2><p>&emsp;&emsp;一旦说这个主节点被Sentinel认为是客观下线了，故障了，那么，哨兵就会在从节点中选择一个新的节点做为一个新的主节点。<br><br>&emsp;&emsp;首先，sentinel会判断从节点与主节点断开时间的长短，如果超过了某个值（配置文件配置的），那么就排除掉这个从节点。<br><br>&emsp;&emsp;然后进一步的，判断从节点的slave-priority值（也是在配置文件中配置的），越小那么优先级越高，如果是0，永远不参加选举。<br><br>&emsp;&emsp;如果说slave-priority一样的话，那么就判断从节点的offset值，越大说明数据越新，优先级也越高。<br><br>&emsp;&emsp;最后，再判断从节点的运行id大小，越小那么优先级越高。<br><br>&emsp;&emsp;由此，选出来一个新的主节点，开始切换。<br><br>&emsp;&emsp;sentinel给这个新的主节点发送salveof no one的命令，让其真正成为新的主节点。<br><br>&emsp;&emsp;然后，sentinel会给其他的从节点发送slaveof new_masterIP port的命令，让这些老的从节点成为新主节点的从节点并开始同步数据。<br><br>&emsp;&emsp;最后，sentinel还会将故障节点，也就是老的主节点标记为从节点，当故障节点恢复之后，会自动成为新的主节点的从节点。<br></p>
 <h2 id="哨兵的通知"><a href="#哨兵的通知" class="headerlink" title="哨兵的通知"></a>哨兵的通知</h2><p>&emsp;&emsp;通知也是哨兵的最后一个任务，哨兵会将新的主节点的连接信息发送给其他从节点建立新的连接（这是前文提到的）。<br><br>&emsp;&emsp;在此基础上，还要将新的主节点的连接信息，通知所有的客户端，将读写请求转移到以新master为核心的新集群上去。<br></p>
-<h2 id="带有哨兵的Redis集群实现"><a href="#带有哨兵的Redis集群实现" class="headerlink" title="带有哨兵的Redis集群实现"></a>带有哨兵的Redis集群实现</h2><p>&emsp;&emsp;以一个简约的高可用的集群模式为例进行实现，即一主二从三哨兵。<br><br>&emsp;&emsp;首先确保有redis镜像。并建立三个redis容器。且哨兵的前置条件是主从复制ok。如图为一个一主二从的主从复制的redis：<br><br><img src="/../imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98_%E4%B8%BB%E4%BB%8E%E5%A4%87%E4%BB%BD/redis%E4%B8%80%E4%B8%BB%E4%BA%8C%E4%BB%8E%E9%9B%86%E7%BE%A4.png" srcset="/img/loading.gif" lazyload alt="一主二从" title="一主二从"><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br></p>
+<h2 id="带有哨兵的Redis集群实现"><a href="#带有哨兵的Redis集群实现" class="headerlink" title="带有哨兵的Redis集群实现"></a>带有哨兵的Redis集群实现</h2><p>&emsp;&emsp;以一个简约的高可用的集群模式为例进行实现，即一主二从三哨兵。<br><br>&emsp;&emsp;首先确保有redis镜像。并建立三个redis容器。且哨兵的前置条件是主从复制ok。如图为一个一主二从的主从复制的redis：<br><br><img src="/../imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98_%E4%B8%BB%E4%BB%8E%E5%A4%87%E4%BB%BD/redis%E4%B8%80%E4%B8%BB%E4%BA%8C%E4%BB%8E%E9%9B%86%E7%BE%A4.png" srcset="/img/loading.gif" lazyload alt="一主二从" title="一主二从"></p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">docker pull <span class="hljs-keyword">redi</span><span class="hljs-variable">s:bullseye</span><br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;而后，创建一个<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br></p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">[+] Running <span class="hljs-number">7</span>/<span class="hljs-number">7</span><br> ✔ Network redis-sentinel_default           Created                                                                <span class="hljs-number">0.1s</span><br> ✔ Container redis-sentinel-redis-<span class="hljs-literal">master</span>-<span class="hljs-number">1</span>  <span class="hljs-literal">Started</span>                                                                <span class="hljs-number">1.9s</span><br> ✔ Container redis-sentinel-sentinel3-<span class="hljs-number">1</span>     <span class="hljs-literal">Started</span>                                                                <span class="hljs-number">2.1s</span><br> ✔ Container redis-sentinel-sentinel2-<span class="hljs-number">1</span>     <span class="hljs-literal">Started</span>                                                                <span class="hljs-number">2.3s</span><br> ✔ Container redis-sentinel-sentinel1-<span class="hljs-number">1</span>     <span class="hljs-literal">Started</span>                                                                <span class="hljs-number">2.3s</span><br> ✔ Container redis-sentinel-redis-slave1-<span class="hljs-number">1</span>  <span class="hljs-literal">Started</span>                                                                <span class="hljs-number">2.0s</span><br> ✔ Container redis-sentinel-redis-slave2-<span class="hljs-number">1</span>  <span class="hljs-literal">Started</span>                                                                <span class="hljs-number">2.1s</span><br></code></pre></td></tr></table></figure>
+<p>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br></p>
 
                 
               </div>
