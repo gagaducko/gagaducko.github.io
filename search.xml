@@ -4,6 +4,37 @@
   
     
     <entry>
+      <title>学习笔记—RPC框架</title>
+      <link href="/2024/10/08/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94RPC%E6%A1%86%E6%9E%B6/"/>
+      <url>/2024/10/08/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94RPC%E6%A1%86%E6%9E%B6/</url>
+      
+        <content type="html"><![CDATA[<h2 id="什么是RPC"><a href="#什么是RPC" class="headerlink" title="什么是RPC"></a>什么是RPC</h2><p>&emsp;&emsp;RPC，全程是Remote Procedure Call，换言之就是远程过程调用。是分布式系统的一种常见的通信方式，已经有许多年的历史了，也算是一种比较古早的技术。<br><br>&emsp;&emsp;RPC是一种进程间通信技术，允许程序调用另一个地址空间（通常是远程服务器上）的函数，就像调用本地函数一样。它隐藏了底层的网络通信细节，使得分布式系统中的各个模块能够像在本地系统中一样进行协作。<br></p><h2 id="RPC的基本工作原理"><a href="#RPC的基本工作原理" class="headerlink" title="RPC的基本工作原理"></a>RPC的基本工作原理</h2><p>&emsp;&emsp;RPC的核心思想是让一个程序可以通过网络调用另一个程序中的函数或方法，类似于本地调用。它的工作过程通常包括以下几个步骤：<br></p><ul><li><strong>客户端请求</strong>： 客户端调用一个本地的代理函数（通常称为“stub”或“代理”），该函数负责将调用的参数打包成一个请求消息。</li><li><strong>请求序列化</strong>： 该请求消息通过序列化的方式（通常是JSON、XML或二进制格式）转化为一个可传输的数据流。</li><li><strong>发送请求</strong>： 客户端将序列化后的数据发送到远程服务器。</li><li><strong>服务器接收请求</strong>： 服务器解包并解析请求，调用相应的服务或方法。</li><li><strong>响应</strong>： 服务器执行方法后将结果返回，通过网络传输给客户端。</li><li><strong>结果返回</strong>： 客户端解包响应结果，供调用者使用，整个过程就像在本地调用一样透明。</li></ul><p>&emsp;&emsp;如图所示：<br><br><img src="/../imgs/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_RPC/RPC.svg" alt="RPC工作原理"><br>&emsp;&emsp;可以看到的是一个经典的RPC调用流程，客户端调用本地代理函数后，经过网络传输到服务端，服务端执行响应的函数，再通过网络返回结果。<br></p><h2 id="RPC的主要组成部分"><a href="#RPC的主要组成部分" class="headerlink" title="RPC的主要组成部分"></a>RPC的主要组成部分</h2><p>&emsp;&emsp;RPC主要由以下四个部分组成：<br></p><ul><li><strong>客户端代理（Client Stub）</strong>： 它是客户端代码中的一个本地函数，负责将本地调用转换为网络消息并发送到服务器。</li><li><strong>服务器代理（Server Stub）</strong>： 服务器上的代理程序，它接收客户端的消息，调用本地的服务函数，并将结果返回给客户端。</li><li><strong>网络传输协议</strong>： 通常使用TCP&#x2F;IP进行网络通信，但也可以使用HTTP、WebSocket等协议。</li><li><strong>序列化和反序列化</strong>： 由于客户端和服务器在不同的进程甚至是不同的机器上运行，需要将调用的参数和返回值转化为二进制或文本格式，以便在网络上传输（比如使用Protocol Buffers、Thrift、JSON、XML等格式）。</li></ul><h2 id="RPC的类型"><a href="#RPC的类型" class="headerlink" title="RPC的类型"></a>RPC的类型</h2><ul><li><strong>同步RPC</strong>： 客户端发出请求后，必须等待服务器处理完毕并返回结果，客户端才能继续后续操作。典型的RPC大多是同步调用。</li><li><strong>异步RPC</strong>： 客户端发出请求后，不必等待服务器返回，客户端可以继续执行其他操作，服务器的响应在稍后时刻以回调或其他方式处理。</li></ul><h2 id="RPC的优势之处"><a href="#RPC的优势之处" class="headerlink" title="RPC的优势之处"></a>RPC的优势之处</h2><p>&emsp;&emsp;<strong>简化分布式系统开发</strong>： RPC将网络通信的复杂性隐藏在接口之下，开发人员不必关心底层的网络细节，只需要关注调用接口和业务逻辑。<br><br>&emsp;&emsp;<strong>灵活的部署架构</strong>： 通过RPC，应用可以轻松地在多个服务器之间进行分布式部署，适应大规模应用的需求。<br><br>&emsp;&emsp;<strong>跨语言支持</strong>： 许多RPC框架支持多种编程语言，这使得不同语言之间的服务互操作性得以实现。<br></p><h2 id="RPC的缺点"><a href="#RPC的缺点" class="headerlink" title="RPC的缺点"></a>RPC的缺点</h2><p>&emsp;&emsp;<strong>调试困难</strong>： 由于RPC跨越了网络边界，排查问题时可能会受到网络延迟、超时、服务不可用等因素的影响，调试比本地调用复杂。<br><br>&emsp;&emsp;<strong>网络开销</strong>： 每次RPC调用都需要在网络上传输请求和响应，因此相较于本地调用会有网络延迟和带宽开销。<br><br>&emsp;&emsp;<strong>耦合度较高</strong>： 客户端和服务端通常需要共享相同的接口定义，某些实现上需要双方同时更新以保持兼容性。<br></p><h2 id="RPC比较于REST和消息队列"><a href="#RPC比较于REST和消息队列" class="headerlink" title="RPC比较于REST和消息队列"></a>RPC比较于REST和消息队列</h2><table><thead><tr><th>特性</th><th>RPC</th><th>消息队列</th><th>REST</th></tr></thead><tbody><tr><td>通信模式</td><td>同步&#x2F;异步</td><td>异步为主</td><td>同步为主</td></tr><tr><td>传输协议</td><td>TCP、HTTP&#x2F;2、HTTP</td><td>任意传输协议（常用TCP）</td><td>HTTP</td></tr><tr><td>数据格式</td><td>二进制（如Protocol Buffers、Thrift）或文本</td><td>通常为消息序列化（JSON、XML、二进制）</td><td>JSON、XML等文本格式</td></tr><tr><td>设计风格</td><td>面向过程或函数调用</td><td>基于消息的发布-订阅或队列模型</td><td>面向资源，操作资源的表现层</td></tr><tr><td>典型应用场景</td><td>微服务、分布式系统、跨语言服务</td><td>日志、事件处理、任务调度</td><td>Web API、面向浏览器的服务</td></tr><tr><td>调用方式</td><td>远程过程调用（函数或方法调用）</td><td>发布-订阅或生产-消费模型</td><td>基于HTTP动词（GET、POST、PUT等）</td></tr><tr><td>依赖</td><td>客户端和服务器共享接口定义</td><td>消息代理（如RabbitMQ、Kafka等）</td><td>无需特别依赖，只需遵循HTTP协议</td></tr><tr><td>延迟</td><td>较低（但有网络延迟）</td><td>较低到中等（取决于队列和网络情况）</td><td>较高（HTTP本身较慢，特别是HTTPS）</td></tr><tr><td>调试难度</td><td>较难（涉及网络、序列化等）</td><td>较难（涉及消息丢失、重试、队列溢出等）</td><td>较简单（HTTP可视化工具丰富）</td></tr><tr><td>扩展性</td><td>中等（接口耦合度高）</td><td>高（可进行水平扩展）</td><td>高（无状态设计，易于扩展）</td></tr><tr><td>常见框架&#x2F;工具</td><td>gRPC、Thrift、XML-RPC、JSON-RPC</td><td>RabbitMQ、Kafka、ActiveMQ</td><td>Spring Boot（Java）、Django（Python）</td></tr></tbody></table><p>&emsp;&emsp;相比之下，在REST和RPC中，RPC的接口设计可以更灵活、封装更强，但REST更简单、标准化，容易与浏览器等客户端交互。<br><br>&emsp;&emsp;消息队列（如RabbitMQ、Kafka）常用于异步的消息通信，而RPC更多用于同步的远程调用。消息队列能够缓冲消息，适合高吞吐量的场景，而RPC则倾向于实时、低延迟的交互。<br></p><h2 id="RPC实战"><a href="#RPC实战" class="headerlink" title="RPC实战"></a>RPC实战</h2><p>&emsp;&emsp;对于一个简单的RPC实现来说，可以参考：<br><br>&emsp;&emsp;分为四个主要模块，即client模块、序列化模块、网络模块和server模块。<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br><br>&emsp;&emsp;<br></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习笔记 </category>
+          
+          <category> 微服务学习笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> RPC </tag>
+            
+            <tag> 框架 </tag>
+            
+            <tag> 远程调用 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>学习笔记—数据库—MySQL的读写分离</title>
       <link href="/2024/09/30/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E2%80%94MySQL%E7%9A%84%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
       <url>/2024/09/30/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E2%80%94MySQL%E7%9A%84%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/</url>
@@ -60,9 +91,9 @@
     
     
     <entry>
-      <title>学习笔记——nginx(2)——nginx进阶</title>
-      <link href="/2024/09/29/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94nginx-2-%E2%80%94%E2%80%94nginx%E8%BF%9B%E9%98%B6/"/>
-      <url>/2024/09/29/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94nginx-2-%E2%80%94%E2%80%94nginx%E8%BF%9B%E9%98%B6/</url>
+      <title>学习笔记—nginx(2)—nginx进阶</title>
+      <link href="/2024/09/29/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94nginx-2%E2%80%94nginx%E8%BF%9B%E9%98%B6/"/>
+      <url>/2024/09/29/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94nginx-2%E2%80%94nginx%E8%BF%9B%E9%98%B6/</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -118,9 +149,9 @@
     
     
     <entry>
-      <title>学习笔记——nginx(1)——nginx基础</title>
-      <link href="/2024/09/26/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94nginx(1)%E2%80%94%E2%80%94nginx%E5%9F%BA%E7%A1%80/"/>
-      <url>/2024/09/26/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94nginx(1)%E2%80%94%E2%80%94nginx%E5%9F%BA%E7%A1%80/</url>
+      <title>学习笔记—nginx(1)—nginx基础</title>
+      <link href="/2024/09/26/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94nginx(1)%E2%80%94nginx%E5%9F%BA%E7%A1%80/"/>
+      <url>/2024/09/26/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94nginx(1)%E2%80%94nginx%E5%9F%BA%E7%A1%80/</url>
       
         <content type="html"><![CDATA[]]></content>
       
